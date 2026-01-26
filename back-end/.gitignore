@@ -1,0 +1,13 @@
+# Visual Studio Code configuration
+.vscode/
+
+# Contains all your dependencies
+node_modules
+
+# Deal with environment files
+.env
+.env.*
+# We'll allow an example .env file which can be copied
+!.env.example
+
+dist

@@ -1,5 +1,7 @@
 // Import the 'express' module
 import express, { type Request, type Response }  from "express";
+import decks from "./routes/decks.js"
+import cards from "./routes/cards.js"
 
 // Create an Express application
 const app = express();
@@ -7,10 +9,13 @@ const app = express();
 // Set the port number for the server
 const port = 5000;
 
+app.use("/decks", decks);
+app.use("/cards", cards);
+
 // Define a route for the root path ('/')
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
   // Send a response to the client
-  res.send('Hello, TypeScript + Node.js + Express!');
+  res.status(200).json({message: 'Hello, TypeScript + Node.js + Express!'});
 });
 
 // Start the server and listen on the specified port

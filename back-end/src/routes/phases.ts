@@ -1,5 +1,5 @@
-import express from 'express';
-import { createPhase, deletePhase, getAllPhases, getPhase, modifyPhase } from '../controllers/phasesController.js';
+import express from "express";
+import { createPhase, deletePhase, getAllPhases, getPhase, modifyPhase } from "../controllers/phasesController.js";
 
 const router = express.Router();
 

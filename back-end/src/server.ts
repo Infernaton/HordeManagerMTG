@@ -1,6 +1,6 @@
 // Import the 'express' module
-import decks from "./routes/decks.js";
-import cards from "./routes/cards.js";
+import decks from "./routes/decks";
+import cards from "./routes/cards";
 import express, { type Request, type Response } from "express";
 
 // Create an Express application

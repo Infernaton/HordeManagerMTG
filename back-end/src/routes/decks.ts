@@ -1,6 +1,6 @@
 import express from "express";
 import phases from "./phases.js";
-import { createDeck, deleteDeck, getAllDecks, getDeck, modifyDeck } from "../controllers/decksController.js";
+import { createDeck, deleteDeck, getAllDecks, getDeck, modifyDeck } from "../controllers/decksController";
 
 const router = express.Router();
 

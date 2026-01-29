@@ -1,11 +1,9 @@
-import type Card from "./Card.js";
+import type { Card } from "./Card.js";
 
-const phaseModel = {
+export interface Phase {
     id: Number,
     description: String,
     color: String,
 
-    card_list: Array<typeof Card>
+    card_list: Array<Card>
 };
-
-export default phaseModel;

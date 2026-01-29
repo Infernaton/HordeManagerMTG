@@ -1,5 +1,5 @@
-const cardModel = {
-    id: Number,
+export interface Card {
+    id: String,
     name: String,
     mana_cost: String,
     type_line: String,
@@ -7,7 +7,6 @@ const cardModel = {
     power: String,
     toughness: String,
 
+    crop_image: URL,
     full_image: URL
 }
-
-export default cardModel;

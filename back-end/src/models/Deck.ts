@@ -1,12 +1,10 @@
-import type Phase from "./Phase.js";
+import type { Phase } from "./Phase.js";
 
-const phaseModel = {
+export interface Deck {
     id: Number,
     name: String,
     description: String,
     image: URL,
 
-    phases: Array<typeof Phase>
+    phases: Array<Phase>
 };
-
-export default phaseModel;

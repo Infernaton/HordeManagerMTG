@@ -1,6 +1,6 @@
 import axios from "axios";
 import type { Request, Response } from "express";
-import type { Card } from "../models/Card";
+import type { Card } from "../models/Card.js";
 
 const extractCardData = (fetch: any) => {
     return {

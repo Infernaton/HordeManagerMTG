@@ -6,8 +6,6 @@ import express, { type Request, type Response } from "express";
 // Create an Express application
 const app = express();
 
-console.log("test");
-
 // Set the port number for the server
 const port = 5000;
 

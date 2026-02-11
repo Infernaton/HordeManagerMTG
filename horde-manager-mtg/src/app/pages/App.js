@@ -1,5 +1,6 @@
 // import logo from "../../public/logo.svg";
 import "./App.css";
+import DeckCard from "../components/DeckCard";
 
 function App() {
     return (
@@ -8,7 +9,9 @@ function App() {
                 <p>Deck List</p>
                 <hr />
             </header>
-            <div className="App-body">TEST</div>
+            <div className="App-body">
+                <DeckCard />
+            </div>
         </div>
     );
 }

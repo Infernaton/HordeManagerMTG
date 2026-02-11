@@ -1,9 +1,9 @@
 import "./components.css";
 
-function DeckCard() {
+function DeckCard({ deck }) {
     return (
-        <div className="deck-card">
-            <p>TEST</p>
+        <div className="deck-card" style={{ backgroundImage: "url(" + deck.image + ")" }}>
+            <p className="deck-title">{deck.name}</p>
         </div>
     );
 }

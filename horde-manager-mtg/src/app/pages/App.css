@@ -27,8 +27,32 @@
   padding: var(--upper-margin) var(--left-margin) 0;
   background-color: #282c34;
   flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
 }
 
 .App-link {
   color: #61dafb;
+}
+
+.card-container {
+  &>* {
+    margin: 0.5em;
+    width: calc(100% / 2 - 1em);
+  }
+
+  &.col3>* {
+    width: calc(100% / 3 - 1em);
+  }
+
+  &.col5>* {
+    width: calc(100% / 5 - 1em);
+  }
+
+  &.col10>* {
+    width: calc(100% / 10 - 1em);
+  }
 }

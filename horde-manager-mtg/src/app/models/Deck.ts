@@ -6,5 +6,6 @@ export interface Deck {
     description: String;
     image: URL;
 
+    bosses: Phase;
     phases: Array<Phase>;
 }

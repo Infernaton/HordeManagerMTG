@@ -1,44 +1,70 @@
 :root {
   --left-margin: 10vw;
   --upper-margin: 5vh;
+
+
+  --main-color: #2a3027;
+  --background-gray-color: #40493b;
+  --background-light-gray-color: #a4ae9e;
+  --alt-main-color: #2a485a;
+  --alt-light-main-color: #5b788c;
+
+  --text-color: #ebe9d7;
 }
 
-.App {
-  color: white;
+.Main-page {
+  color: var(--text-color);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   flex-wrap: nowrap;
+
+  hr {
+    color: var(--text-color);
+    border-color: var(--background-gray-color);
+    background-color: var(--text-color);
+  }
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
+.Main-header {
   padding: var(--upper-margin) var(--left-margin) 0;
-  background-color: #282c34;
+  background-color: var(--main-color);
   font-size: calc(10px + 2vmin);
+  position: relative;
+
+  &>*:not(.header-cover) {
+    position: relative;
+    z-index: 2;
+  }
+
+  .header-cover {
+    position: absolute;
+    background-size: cover;
+    background-position: left;
+    width: 55%;
+    height: 100%;
+    top: 0;
+    right: 0;
+    z-index: 1;
+
+    mask: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%);
+  }
 }
 
-.App-body {
+.Main-body {
   padding: var(--upper-margin) var(--left-margin) 0;
-  background-color: #282c34;
+  background-color: var(--background-gray-color);
   flex-grow: 1;
+}
+
+.card-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
   align-content: flex-start;
-}
 
-.App-link {
-  color: #61dafb;
-}
-
-.card-container {
   &>* {
     margin: 0.5em;
     width: calc(100% / 2 - 1em);

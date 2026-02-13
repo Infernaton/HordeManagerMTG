@@ -1,4 +1,4 @@
-import DeckCard from "../components/DeckCard";
+import ListDeckCard from "../components/ListDeckCard";
 import { Store } from "../store";
 
 function DeckList() {
@@ -11,7 +11,7 @@ function DeckList() {
                 <hr />
                 <div className="card-container col3">
                     {Store.Decks.map((deck) => (
-                        <DeckCard key={deck.id as React.Key} deck={deck} />
+                        <ListDeckCard key={deck.id as React.Key} deck={deck} />
                     ))}
                 </div>
             </div>

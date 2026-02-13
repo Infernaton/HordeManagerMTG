@@ -82,7 +82,7 @@
     width: calc(100% / 5 - 1em);
   }
 
-  &.col10>* {
-    width: calc(100% / 10 - 1em);
+  &.col7>* {
+    width: calc(100% / 7 - 1em);
   }
 }

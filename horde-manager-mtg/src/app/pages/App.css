@@ -10,6 +10,8 @@
   --alt-light-main-color: #5b788c;
 
   --text-color: #ebe9d7;
+
+  --fallback-image: url("https://cards.scryfall.io/art_crop/front/e/b/eb9963e0-a22a-4a64-aa0c-b7c67c5fee96.jpg?1629919504");
 }
 
 .Main-page {
@@ -47,6 +49,8 @@
     top: 0;
     right: 0;
     z-index: 1;
+
+    background-image: var(--fallback-image);
 
     mask: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%);
   }

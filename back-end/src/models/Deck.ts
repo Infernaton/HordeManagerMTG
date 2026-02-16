@@ -1,10 +1,13 @@
+import type { Card } from "./Card.js";
 import type { Phase } from "./Phase.js";
 
 export interface Deck {
-    id: Number;
-    name: String;
-    description: String;
-    image: URL;
+	id: Number;
+	name: String;
+	description: String;
+	image: URL;
 
-    phases: Array<Phase>;
+	bosses?: Phase;
+	phases: Array<Phase>;
+	unsorted?: Array<Card>;
 }

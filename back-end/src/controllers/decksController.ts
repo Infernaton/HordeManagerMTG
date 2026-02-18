@@ -1,8 +1,9 @@
-import axios from "axios";
+import axios, { type AxiosResponse } from "axios";
 import type { Request, Response } from "express";
 import { Card } from "../models/Card.js";
 import type e from "express";
 import type { IDictionary } from "../models/interface.js";
+import { bulkReadFormat } from "../middleware/stringManipulation.js";
 
 export const getAllDecks = async (req: Request, res: Response) => {
 	try {
@@ -46,42 +47,32 @@ const API_URL = "https://api.scryfall.com";
 export const importBulk = async (req: Request, res: Response) => {
 	try {
 		const { bulk }: { bulk: string } = req.body;
-		const identifiers: Array<{}> = [];
-		let stringArrBulk = bulk.split("\n\n");
-		let storedBulk: any = {};
+		// what the api call need
+		const { apiCallBody: identifiers, sortedCard } = bulkReadFormat(bulk);
 
-		const regex = new RegExp("^[^0-9]");
-
-		for (let i = 0; i < stringArrBulk.length; i++) {
-			const strSplit: Array<string> = stringArrBulk[i].split("\n");
-			const objSplit: IDictionary<string> = {};
-			strSplit.forEach((e) => {
-				const s = e.split(/ (.*)/s);
-				objSplit[s[1]] = s[0];
-			});
-
-			if (regex.test(stringArrBulk[i])) {
-				delete objSplit["undefined"];
-				storedBulk[strSplit[0].replace(":", "")] = objSplit;
-			} else {
-				storedBulk[i] = objSplit;
-			}
-
-			// objSplit.forEach((e) => {
-			// 	if (prepareFetchBulk[e]) prepareFetchBulk[e];
-			// });
+		let fetches: Array<Promise<AxiosResponse<any, any, {}>>> = [];
+		const MAX_REQUEST_CARD = 75;
+		for (let i = 0; i < identifiers.length; i = i + MAX_REQUEST_CARD) {
+			fetches.push(
+				axios.post(`${API_URL}/cards/collection`, {
+					identifiers: identifiers.slice(i, i + MAX_REQUEST_CARD),
+				}),
+			);
 		}
 
-		// const { data: fetch } = await axios.post(`${API_URL}/cards/collection`, { identifiers });
-		// const { data: card_result } = fetch;
+		const data = await Promise.all(fetches);
+		const filteredData = data.map((d) => d.data);
+		const found = filteredData.flatMap((e) => e.data);
+		const notFound = filteredData.flatMap((e) => e.not_found);
 
-		// let cards: Array<Card> = [];
-		// for (let i = 0; i < card_result.length; i++) {
-		// 	const card: Card = new Card(card_result[i]);
-		// 	cards.push(card);
-		// }
+		let cards: Array<Card> = [];
+		for (let i = 0; i < found.length; i++) {
+			// console.log(found[i].id, found[i].name);
+			const card: Card = new Card(found[i]);
+			cards.push(card);
+		}
 
-		res.status(200).json({ storedBulk });
+		res.status(200).json({ found: cards, notFound });
 	} catch (error) {
 		console.log(error);
 		res.status(404).json({ message: "fail searching for cards data", error });

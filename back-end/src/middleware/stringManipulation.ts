@@ -1,0 +1,42 @@
+import type { IBulkReturn, IDictionary } from "../models/interface";
+
+export const bulkReadFormat = (entry: string): IBulkReturn => {
+	let stringArrBulk = entry.split("\n\n");
+	let storedBulk: any = {};
+	let apiCallBody: { name: string }[] = [];
+
+	const regex = new RegExp("^[^0-9]");
+
+	// pass for each card section (main deck, sideboard ...)
+	for (let i = 0; i < stringArrBulk.length; i++) {
+		// split every card from the bulk from that section
+		const strSplit: Array<string> = stringArrBulk[i].split("\n");
+		const objSplit: IDictionary<string> = {};
+
+		// Each element are currently in the form => "<number> <card's name>" like "5 Plains"
+		// Display each element as <key>: the name of the card = <value>: the number present in that section
+		// to better read what cards are in
+		strSplit.forEach((e) => {
+			const s = e.split(/ (.*)/s);
+			objSplit[s[1]] = s[0];
+			if (s[1] != undefined) apiCallBody.push({ name: s[1] });
+		});
+
+		// if the first element of the split don't have a number as a first character, it means a section name
+		// -> putting that as a key name for that section
+		if (regex.test(strSplit[0])) {
+			delete objSplit["undefined"];
+			storedBulk[strSplit[0].replace(":", "")] = objSplit;
+		} else {
+			storedBulk[i] = objSplit;
+		}
+
+		// objSplit.forEach((e) => {
+		// 	if (prepareFetchBulk[e]) prepareFetchBulk[e];
+		// });
+	}
+	return {
+		apiCallBody,
+		sortedCard: storedBulk,
+	};
+};

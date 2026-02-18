@@ -1,10 +1,10 @@
 import { readFile } from "fs";
-import type { Deck } from "./models/Deck.js";
+import type { HordeDeck } from "./models/Deck.js";
 import type { Phase } from "./models/Phase.js";
 import type { Card } from "./models/Card.js";
 
 export class DB {
-	#data: Array<Deck> = [];
+	#data: Array<HordeDeck> = [];
 
 	static path: string = "../db.example.json";
 	static instance: DB;
@@ -27,11 +27,11 @@ export class DB {
 
 	//#region Decks
 
-	getDecks(): Array<Deck> {
+	getDecks(): Array<HordeDeck> {
 		return this.#data;
 	}
 
-	getDeck(id: number): Deck {
+	getDeck(id: number): HordeDeck {
 		return this.#data[id];
 	}
 

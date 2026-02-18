@@ -17,7 +17,7 @@ export const bulkReadFormat = (entry: string): IBulkReturn => {
 		// Display each element as <key>: the name of the card = <value>: the number present in that section
 		// to better read what cards are in
 		strSplit.forEach((e) => {
-			const s = e.split(/ (.*)/s);
+			const s = e.split(/ (.*)/s); // split the string on the first space character found
 			objSplit[s[1]] = s[0];
 			if (s[1] != undefined) apiCallBody.push({ name: s[1] });
 		});

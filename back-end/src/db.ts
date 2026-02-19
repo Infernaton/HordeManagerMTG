@@ -1,28 +1,46 @@
-import { readFile } from "fs";
+import { readFile, writeFile } from "fs/promises";
 import type { HordeDeck } from "./models/Deck.js";
 import type { Phase } from "./models/Phase.js";
 import type { Card } from "./models/Card.js";
 
 export class DB {
-	#data: Array<HordeDeck> = [];
+	#data: Array<HordeDeck>;
 
-	static path: string = "../db.example.json";
+	static path: string = "./db.example.json";
 	static instance: DB;
 
 	constructor() {
-		readFile(DB.path, "utf8", (err, jsonString: string) => {
-			if (err) {
-				console.error("Error reading file:", err);
-			} else {
-				this.#data = JSON.parse(jsonString);
-			}
-		});
+		this.#data = [];
 	}
 
-	static connection(): DB {
-		if (this.instance == null || this.instance == undefined) this.instance = new DB();
+	async connect() {
+		const jsonString = await readFile(DB.path, "utf8");
+		this.#data = JSON.parse(jsonString);
+	}
+
+	static async connection(): Promise<DB> {
+		if (this.instance == null || this.instance == undefined) {
+			this.instance = new DB();
+			await this.instance.connect();
+		}
 
 		return this.instance;
+	}
+
+	/**
+	 * Push the updatedDeck from local modification through the global variable
+	 * @param updatedDeck
+	 */
+	push(updatedDeck: HordeDeck): void {
+		const deckIndex = this.#data.findIndex((e) => e.id == updatedDeck.id);
+		this.#data.fill(updatedDeck, deckIndex, deckIndex + 1);
+	}
+
+	/**
+	 * Commit the global variable into the json file
+	 */
+	commit() {
+		writeFile(DB.path, JSON.stringify(this.#data));
 	}
 
 	//#region Decks
@@ -31,40 +49,43 @@ export class DB {
 		return this.#data;
 	}
 
-	getDeck(id: number): HordeDeck {
-		return this.#data[id];
-	}
-
-	getDeckBosses(idDeck: number): Phase | undefined {
-		return this.#data[idDeck]?.bosses;
-	}
-
-	getUnsortedCards(idDeck: number): Array<Card> | undefined {
-		return this.#data[idDeck]?.unsorted;
+	getDeck(id: number) {
+		return this.#data.find((e) => e.id == id);
 	}
 
 	createPhase(idDeck: number, newPhase: Phase) {
-		if (idDeck >= this.#data.length) return false;
+		const currentDeck = this.getDeck(idDeck);
+		if (currentDeck == undefined) return false;
 
-		this.#data[idDeck].phases.push(newPhase);
+		currentDeck.phases.push(newPhase);
+
+		this.push(currentDeck);
 		//commit change to file
+
 		return true;
 	}
 
 	addUnsortedCard(idDeck: number, card: Card) {
-		if (idDeck >= this.#data.length) return false;
+		console.log(idDeck, card);
+		const currentDeck = this.getDeck(idDeck);
+		if (currentDeck == undefined) return false;
 
-		if (this.#data[idDeck].unsorted == undefined) this.#data[idDeck].unsorted = [];
-		this.#data[idDeck].unsorted.push(card);
+		if (currentDeck.unsorted == undefined) currentDeck.unsorted = [];
+		currentDeck.unsorted.push(card);
+
+		this.push(currentDeck);
 		//commit change to file
 
 		return true;
 	}
 
 	modifyBosses(idDeck: number, bosses: Phase) {
-		if (idDeck >= this.#data.length) return false;
+		const currentDeck = this.getDeck(idDeck);
+		if (currentDeck == undefined) return false;
 
-		this.#data[idDeck].bosses = bosses;
+		currentDeck.bosses = bosses;
+
+		this.push(currentDeck);
 		//commit change to file
 
 		return true;
@@ -74,44 +95,47 @@ export class DB {
 
 	//#region Phases
 
-	getPhases(idDeck: number): Array<Phase> {
-		return this.#data[idDeck]?.phases;
+	getPhases(idDeck: number): Array<Phase> | undefined {
+		return this.getDeck(idDeck)?.phases;
 	}
 
-	getPhase(idDeck: number, idPhase: number): Phase {
-		return this.#data[idDeck]?.phases[idPhase];
+	getPhase(idDeck: number, idPhase: number): Phase | undefined {
+		return this.getDeck(idDeck)?.phases.find((e) => e.id == idPhase);
 	}
 
 	updatePhase(idDeck: number, updated: Phase) {
-		if (idDeck >= this.#data.length) return false;
+		const currentDeck = this.getDeck(idDeck);
+		if (currentDeck == undefined) return false;
 
-		const tmp = this.#data[idDeck].phases.findIndex((e) => e.id == updated.id);
-		if (tmp != -1) {
-			this.#data[idDeck].phases[tmp] = updated;
+		const tmp = currentDeck.phases.findIndex((e) => e.id == updated.id);
+		if (tmp && tmp != -1) {
+			currentDeck.phases.fill(updated, tmp, tmp + 1);
+			this.push(currentDeck);
 			//commit change to file
 		}
-		return tmp >= 0; // check if succeeded
+		return tmp && tmp >= 0; // check if succeeded
 	}
 
 	removePhase(idDeck: number, idPhase: number) {
-		if (idDeck >= this.#data.length) return false;
+		const currentDeck = this.getDeck(idDeck) as HordeDeck;
+		if (currentDeck == undefined) return false;
 
-		if (idPhase >= this.#data[idDeck].phases.length) return false;
-
-		this.#data[idDeck].phases.splice(idPhase, 1);
+		const tmp = currentDeck.phases.findIndex((e) => e.id == idPhase);
+		if (tmp != -1) {
+			currentDeck.phases.splice(tmp, 1);
+			this.push(currentDeck);
+		}
 		//commit change to file
-		return true;
+		return tmp >= 0; // check if succeeded
 	}
 
 	addCardPhase(idDeck: number, idPhase: number, card: Card) {
-		if (idDeck >= this.#data.length) return false;
+		const currentPhase = this.getPhase(idDeck, idPhase);
+		if (currentPhase == undefined) return false;
 
-		if (idPhase >= this.#data[idDeck].phases.length) return false;
+		currentPhase.card_list.push(card);
 
-		this.#data[idDeck].phases[idPhase].card_list.push(card);
-		//commit change to file
-
-		return true;
+		return this.updatePhase(idDeck, currentPhase);
 	}
 
 	/**
@@ -121,14 +145,13 @@ export class DB {
 	 * @param idCard Scryfall ID
 	 */
 	removeCardPhase(idDeck: number, idPhase: number, idCard: string) {
-		if (idDeck >= this.#data.length) return false;
+		const currentPhase = this.getPhase(idDeck, idPhase);
+		if (currentPhase == undefined) return false;
 
-		if (idPhase >= this.#data[idDeck].phases.length) return false;
-
-		const tmp = this.#data[idDeck].phases[idPhase].card_list.findIndex((e) => e.id == idCard);
+		const tmp = currentPhase.card_list.findIndex((e) => e.id == idCard);
 		if (tmp != -1) {
-			this.#data[idDeck].phases[idPhase].card_list.splice(tmp, 1);
-			//commit change to file
+			currentPhase.card_list.splice(tmp, 1);
+			this.updatePhase(idDeck, currentPhase);
 		}
 		return tmp >= 0; // check if succeeded
 	}

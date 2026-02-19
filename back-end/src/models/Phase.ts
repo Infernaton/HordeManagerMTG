@@ -1,9 +1,9 @@
 import type { Card } from "./Card.js";
 
 export interface Phase {
-    id: Number;
-    description: String;
-    color: String;
+	id: number;
+	description: string;
+	color: string;
 
-    card_list: Array<Card>;
+	card_list: Array<Card>;
 }

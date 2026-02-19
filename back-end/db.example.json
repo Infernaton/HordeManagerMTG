@@ -33,14 +33,8 @@
 				}
 			]
 		},
-		"phases": [
-			{
-				"id": 1,
-				"color": "green",
-				"description": "",
-				"card_list": []
-			}
-		]
+		"phases": [{ "id": 1, "color": "green", "description": "", "card_list": [] }],
+		"unsorted": []
 	},
 	{
 		"id": 2,
@@ -48,7 +42,8 @@
 		"description": "",
 		"image": "https://cards.scryfall.io/art_crop/front/9/c/9c735bda-5454-4177-a23a-f9f00b7480d2.jpg?1562878661",
 		"bosses": {},
-		"phases": []
+		"phases": [],
+		"unsorted": []
 	},
 	{
 		"id": 3,
@@ -56,7 +51,8 @@
 		"description": "",
 		"image": "https://cards.scryfall.io/art_crop/front/9/8/98a79557-8ed6-4d9a-b4e1-cece05664984.jpg?1738356552",
 		"bosses": {},
-		"phases": []
+		"phases": [],
+		"unsorted": []
 	},
 	{
 		"id": 4,
@@ -64,7 +60,8 @@
 		"description": "",
 		"image": "https://cards.scryfall.io/art_crop/front/e/9/e9e00112-8c6c-4551-ad68-389e315fe148.jpg?1543676118",
 		"bosses": {},
-		"phases": []
+		"phases": [],
+		"unsorted": []
 	},
 	{
 		"id": 5,
@@ -72,6 +69,7 @@
 		"description": "",
 		"image": "https://cards.scryfall.io/art_crop/front/2/f/2ff39de2-d071-4568-baac-25b505a2da56.jpg?1562013207",
 		"bosses": {},
-		"phases": []
+		"phases": [],
+		"unsorted": []
 	}
 ]

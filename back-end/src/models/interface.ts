@@ -4,5 +4,5 @@ export interface IDictionary<TValue> {
 
 export interface IBulkReturn {
 	apiCallBody: Array<{}>;
-	sortedCard: Array<IDictionary<string>>;
+	sortedCard: Array<IDictionary<number>>;
 }

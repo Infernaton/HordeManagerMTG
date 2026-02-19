@@ -4,9 +4,9 @@ import type { Phase } from "./Phase.js";
 // Except to work with the Horde Game
 // Might also work with common deck
 export interface HordeDeck {
-	id: Number;
-	name: String;
-	description: String;
+	id: number;
+	name: string;
+	description: string;
 	image: URL;
 
 	bosses?: Phase;

@@ -4,6 +4,7 @@ import { Card } from "../models/Card.js";
 import type e from "express";
 import type { IDictionary } from "../models/interface.js";
 import { bulkReadFormat } from "../middleware/stringManipulation.js";
+import { DB } from "../db.js";
 
 export const getAllDecks = async (req: Request, res: Response) => {
 	try {
@@ -47,6 +48,11 @@ const API_URL = "https://api.scryfall.com";
 export const importBulk = async (req: Request, res: Response) => {
 	try {
 		const { bulk }: { bulk: string } = req.body;
+
+		const db = await DB.connection();
+		const currentDeck = db.getDeck(+`${req.params["id"]}`);
+		if (currentDeck == undefined) throw new Error("No deck was found");
+
 		// what the api call need
 		const { apiCallBody: identifiers, sortedCard } = bulkReadFormat(bulk);
 
@@ -65,17 +71,26 @@ export const importBulk = async (req: Request, res: Response) => {
 		const found = filteredData.flatMap((e) => e.data);
 		const notFound = filteredData.flatMap((e) => e.not_found);
 
-		let cards: Array<Card> = [];
+		// let cards: Array<Card> = [];
 		for (let i = 0; i < found.length; i++) {
-			// console.log(found[i].id, found[i].name);
 			const card: Card = new Card(found[i]);
-			cards.push(card);
+			// cards.push(card);
+			for (const [key, value] of Object.entries(sortedCard)) {
+				// key -> name of the part
+				// value -> all the card name from that part
+				const fullCardName = card.front_card.name + (card.back_card ? "/" + card.back_card.name : "");
+				if (value[fullCardName] == undefined) continue;
+
+				for (let o = 0; o < value[fullCardName]; o++) {
+					db.addUnsortedCard(currentDeck.id, card);
+				}
+			}
 		}
+		db.commit();
 
 		// res.status(200).json({ sortedCard, filteredData, notFound, cards });
-		res.status(200).json({ notFound, found: cards });
+		res.status(200).json({ notFound });
 	} catch (error) {
-		console.log(error);
-		res.status(404).json({ message: "fail searching for cards data", error });
+		res.status(500).json({ message: "fail searching for cards data" + error, error });
 	}
 };

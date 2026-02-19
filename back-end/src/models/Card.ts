@@ -1,8 +1,8 @@
 class CardFace {
-	name: String;
-	mana_cost?: String;
-	type_line: String;
-	oracle_text: String;
+	name: string;
+	mana_cost?: string;
+	type_line: string;
+	oracle_text: string;
 
 	crop_image: URL;
 	full_image: URL;
@@ -30,8 +30,8 @@ class CardFace {
 }
 
 class CreatureCardFace extends CardFace {
-	power: String;
-	toughness: String;
+	power: string;
+	toughness: string;
 
 	constructor(fetch: any, image_uris: any) {
 		super(fetch, image_uris);
@@ -44,7 +44,7 @@ class CreatureCardFace extends CardFace {
  * Correspond to Battle and Planeswalker card
  */
 class PointCardFace extends CardFace {
-	point: String; // Loyalty or Defense point
+	point: string; // Loyalty or Defense point
 
 	constructor(fetch: any, image_uris: any) {
 		super(fetch, image_uris);
@@ -53,8 +53,8 @@ class PointCardFace extends CardFace {
 }
 
 export class Card {
-	id: String;
-	layout: String;
+	id: string;
+	layout: string;
 
 	front_card: CardFace;
 	back_card?: CardFace;
@@ -73,8 +73,6 @@ export class Card {
 		 * battle (battle don't seems to be attached to battle supertype cards for now. siege type are a transform layout)
 		 */
 		this.layout = fetch.layout;
-
-		// find a way to define planeswalker
 
 		// Meld card need to be inserted somehow ...
 		if (["transform", "modal_dfc"].includes(fetch.layout)) {

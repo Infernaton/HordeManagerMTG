@@ -72,7 +72,8 @@ export const importBulk = async (req: Request, res: Response) => {
 			cards.push(card);
 		}
 
-		res.status(200).json({ found: cards, notFound });
+		// res.status(200).json({ sortedCard, filteredData, notFound, cards });
+		res.status(200).json({ notFound, found: cards });
 	} catch (error) {
 		console.log(error);
 		res.status(404).json({ message: "fail searching for cards data", error });

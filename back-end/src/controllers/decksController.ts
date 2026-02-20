@@ -5,6 +5,7 @@ import type e from "express";
 import type { IDictionary } from "../models/interface.js";
 import { bulkReadFormat } from "../middleware/stringManipulation.js";
 import { DB } from "../db.js";
+import { Section } from "../models/Section.js";
 
 export const getAllDecks = async (req: Request, res: Response) => {
 	try {
@@ -82,7 +83,13 @@ export const importBulk = async (req: Request, res: Response) => {
 				if (value[fullCardName] == undefined) continue;
 
 				for (let o = 0; o < value[fullCardName]; o++) {
-					db.addUnsortedCard(currentDeck.id, card);
+					if (/[0-9]/.test(key)) db.addUnsortedCard(currentDeck.id, card);
+					else {
+						let section = db.getSection(currentDeck.id, (e) => key == e.name);
+						// When a section is created, it hasn't an id yet
+						if (section == undefined) section = Section.create(key, "", "#aaaaaa");
+						section.addCards(db, currentDeck.id, card);
+					}
 				}
 			}
 		}

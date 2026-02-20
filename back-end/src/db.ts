@@ -1,7 +1,12 @@
 import { readFile, writeFile } from "fs/promises";
 import type { HordeDeck } from "./models/Deck.js";
-import type { Phase } from "./models/Phase.js";
+import type { Section } from "./models/Section.js";
 import type { Card } from "./models/Card.js";
+
+// interface DBTree {
+// 	decks: Array<HordeDeck>;
+// 	sections: Array<GlobalSection>;
+// }
 
 export class DB {
 	#data: Array<HordeDeck>;
@@ -10,7 +15,7 @@ export class DB {
 	static instance: DB;
 
 	constructor() {
-		this.#data = [];
+		this.#data = []; // { decks: [], sections: [] };
 	}
 
 	async connect() {
@@ -27,6 +32,8 @@ export class DB {
 		return this.instance;
 	}
 
+	//#region Helper
+
 	/**
 	 * Push the updatedDeck from local modification through the global variable
 	 * @param updatedDeck
@@ -35,6 +42,10 @@ export class DB {
 		const deckIndex = this.#data.findIndex((e) => e.id == updatedDeck.id);
 		this.#data.fill(updatedDeck, deckIndex, deckIndex + 1);
 	}
+	// pushSection(updateSection: GlobalSection): void {
+	// 	const sectionIndex = this.#data.sections.findIndex((e) => e.id == updateSection.id);
+	// 	this.#data.sections.fill(updateSection, sectionIndex, sectionIndex + 1);
+	// }
 
 	/**
 	 * Commit the global variable into the json file
@@ -42,6 +53,8 @@ export class DB {
 	commit() {
 		writeFile(DB.path, JSON.stringify(this.#data));
 	}
+
+	//#endregion
 
 	//#region Decks
 
@@ -53,11 +66,11 @@ export class DB {
 		return this.#data.find((e) => e.id == id);
 	}
 
-	createPhase(idDeck: number, newPhase: Phase) {
+	createSection(idDeck: number, section: Section) {
 		const currentDeck = this.getDeck(idDeck);
 		if (currentDeck == undefined) return false;
 
-		currentDeck.phases.push(newPhase);
+		currentDeck.sections.push(section);
 
 		this.push(currentDeck);
 		//commit change to file
@@ -66,7 +79,6 @@ export class DB {
 	}
 
 	addUnsortedCard(idDeck: number, card: Card) {
-		console.log(idDeck, card);
 		const currentDeck = this.getDeck(idDeck);
 		if (currentDeck == undefined) return false;
 
@@ -79,7 +91,7 @@ export class DB {
 		return true;
 	}
 
-	modifyBosses(idDeck: number, bosses: Phase) {
+	modifyBosses(idDeck: number, bosses: Section) {
 		const currentDeck = this.getDeck(idDeck);
 		if (currentDeck == undefined) return false;
 
@@ -93,68 +105,108 @@ export class DB {
 
 	//#endregion
 
-	//#region Phases
+	//#region Sections
 
-	getPhases(idDeck: number): Array<Phase> | undefined {
-		return this.getDeck(idDeck)?.phases;
+	getSections(idDeck: number): Array<Section> | undefined {
+		return this.getDeck(idDeck)?.sections;
 	}
 
-	getPhase(idDeck: number, idPhase: number): Phase | undefined {
-		return this.getDeck(idDeck)?.phases.find((e) => e.id == idPhase);
+	getSectionById(idDeck: number, idSection: number): Section | undefined {
+		return this.getDeck(idDeck)?.sections.find((e) => e.id == idSection);
 	}
 
-	updatePhase(idDeck: number, updated: Phase) {
+	getSection(idDeck: number, callback: (element: Section) => {}): Section | undefined {
+		return this.getDeck(idDeck)?.sections.find(callback);
+	}
+
+	updateSection(idDeck: number, updated: Section) {
 		const currentDeck = this.getDeck(idDeck);
 		if (currentDeck == undefined) return false;
 
-		const tmp = currentDeck.phases.findIndex((e) => e.id == updated.id);
-		if (tmp && tmp != -1) {
-			currentDeck.phases.fill(updated, tmp, tmp + 1);
+		const tmp = currentDeck.sections.findIndex((e) => e.id == updated.id);
+		if (tmp != -1) {
+			currentDeck.sections.fill(updated, tmp, tmp + 1);
 			this.push(currentDeck);
 			//commit change to file
 		}
-		return tmp && tmp >= 0; // check if succeeded
+		return tmp >= 0; // check if succeeded
 	}
 
-	removePhase(idDeck: number, idPhase: number) {
+	removeSection(idDeck: number, idSection: number) {
 		const currentDeck = this.getDeck(idDeck) as HordeDeck;
 		if (currentDeck == undefined) return false;
 
-		const tmp = currentDeck.phases.findIndex((e) => e.id == idPhase);
+		const tmp = currentDeck.sections.findIndex((e) => e.id == idSection);
 		if (tmp != -1) {
-			currentDeck.phases.splice(tmp, 1);
+			currentDeck.sections.splice(tmp, 1);
 			this.push(currentDeck);
 		}
 		//commit change to file
 		return tmp >= 0; // check if succeeded
 	}
 
-	addCardPhase(idDeck: number, idPhase: number, card: Card) {
-		const currentPhase = this.getPhase(idDeck, idPhase);
-		if (currentPhase == undefined) return false;
+	//#endregion
 
-		currentPhase.card_list.push(card);
+	//#region card
 
-		return this.updatePhase(idDeck, currentPhase);
+	getCardSection(idDeck: number, idSection: number, idCard: string) {
+		return this.getSectionById(idDeck, idSection)?.card_list.find((e) => e.id == idCard);
+	}
+
+	addCardSection(idDeck: number, idSection: number, card: Card) {
+		const currentSection = this.getSectionById(idDeck, idSection);
+		if (currentSection == undefined) return false;
+
+		currentSection.card_list.push(card);
+
+		return this.updateSection(idDeck, currentSection);
 	}
 
 	/**
 	 *
 	 * @param idDeck
-	 * @param idPhase
+	 * @param idSection
 	 * @param idCard Scryfall ID
 	 */
-	removeCardPhase(idDeck: number, idPhase: number, idCard: string) {
-		const currentPhase = this.getPhase(idDeck, idPhase);
-		if (currentPhase == undefined) return false;
+	removeCardSection(idDeck: number, idSection: number, idCard: string) {
+		const currentSection = this.getSectionById(idDeck, idSection);
+		if (currentSection == undefined) return false;
 
-		const tmp = currentPhase.card_list.findIndex((e) => e.id == idCard);
+		const tmp = currentSection.card_list.findIndex((e) => e.id == idCard);
 		if (tmp != -1) {
-			currentPhase.card_list.splice(tmp, 1);
-			this.updatePhase(idDeck, currentPhase);
+			currentSection.card_list.splice(tmp, 1);
+			this.updateSection(idDeck, currentSection);
 		}
 		return tmp >= 0; // check if succeeded
 	}
 
+	//Move a card of a deck from unsorted to a section; from a section to another or from a section to unsorted
+	/**
+	 * Depending on what's define, will move a card from a location to another
+	 * @param idDeck
+	 * @param idCard
+	 * @param fromIdSection will take the card from that section if define, otherwise will pick from unsorted
+	 * @param toIdSection will take the card to that section if define, otherwise will transfer to unsorted
+	 * @returns
+	 */
+	moveCard(idDeck: number, idCard: string, fromIdSection?: number, toIdSection?: number) {
+		const currentDeck = this.getDeck(idDeck);
+		if (currentDeck == undefined) return false;
+
+		const searchCard = () => {
+			if (fromIdSection) {
+				const card = this.getCardSection(idDeck, fromIdSection, idCard);
+				this.removeCardSection(idDeck, fromIdSection, idCard);
+				return card;
+			} else {
+				return currentDeck.unsorted?.find((e) => e.id == idCard);
+			}
+		};
+		const card = searchCard();
+		if (card == undefined) return false;
+
+		if (toIdSection) return this.addCardSection(idDeck, toIdSection, card);
+		else return this.addUnsortedCard(idDeck, card);
+	}
 	//#endregion
 }

@@ -1,14 +1,20 @@
 import express from "express";
-import { createPhase, deletePhase, getAllPhases, getPhase, modifyPhase } from "../controllers/phasesController.js";
+import {
+	createSection,
+	deleteSection,
+	getAllSections,
+	getSection,
+	modifySection,
+} from "../controllers/sectionsController.js";
 
 const router = express.Router();
 
-router.get("/", getAllPhases);
-router.get("/:id", getPhase);
+router.get("/", getAllSections);
+router.get("/:id", getSection);
 
-router.post("/new", createPhase);
-router.patch("/:id", modifyPhase);
+router.post("/new", createSection);
+router.patch("/:id", modifySection);
 
-router.delete("/:id", deletePhase);
+router.delete("/:id", deleteSection);
 
 export default router;

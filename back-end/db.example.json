@@ -6,6 +6,7 @@
 		"image": "https://cards.scryfall.io/art_crop/front/a/a/aace4c44-7250-414b-aac4-df042a1e2e1d.jpg?1675956894",
 		"bosses": {
 			"id": 1,
+			"name": "Boss Phyrexian",
 			"color": "gold",
 			"description": "One will spawn between phases",
 			"card_list": [
@@ -33,7 +34,7 @@
 				}
 			]
 		},
-		"phases": [{ "id": 1, "color": "green", "description": "", "card_list": [] }],
+		"sections": [{ "id": 1, "color": "green", "description": "", "card_list": [] }],
 		"unsorted": []
 	},
 	{
@@ -42,7 +43,7 @@
 		"description": "",
 		"image": "https://cards.scryfall.io/art_crop/front/9/c/9c735bda-5454-4177-a23a-f9f00b7480d2.jpg?1562878661",
 		"bosses": {},
-		"phases": [],
+		"sections": [],
 		"unsorted": []
 	},
 	{
@@ -51,7 +52,7 @@
 		"description": "",
 		"image": "https://cards.scryfall.io/art_crop/front/9/8/98a79557-8ed6-4d9a-b4e1-cece05664984.jpg?1738356552",
 		"bosses": {},
-		"phases": [],
+		"sections": [],
 		"unsorted": []
 	},
 	{
@@ -60,7 +61,7 @@
 		"description": "",
 		"image": "https://cards.scryfall.io/art_crop/front/e/9/e9e00112-8c6c-4551-ad68-389e315fe148.jpg?1543676118",
 		"bosses": {},
-		"phases": [],
+		"sections": [],
 		"unsorted": []
 	},
 	{
@@ -69,7 +70,7 @@
 		"description": "",
 		"image": "https://cards.scryfall.io/art_crop/front/2/f/2ff39de2-d071-4568-baac-25b505a2da56.jpg?1562013207",
 		"bosses": {},
-		"phases": [],
+		"sections": [],
 		"unsorted": []
 	}
 ]

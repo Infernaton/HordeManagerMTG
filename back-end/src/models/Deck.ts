@@ -1,5 +1,5 @@
 import type { Card } from "./Card.js";
-import type { Phase } from "./Phase.js";
+import type { Section } from "./Section.js";
 
 // Except to work with the Horde Game
 // Might also work with common deck
@@ -9,7 +9,7 @@ export interface HordeDeck {
 	description: string;
 	image: URL;
 
-	bosses?: Phase;
-	phases: Array<Phase>;
+	bosses?: Section;
+	sections: Array<Section>;
 	unsorted?: Array<Card>;
 }

@@ -18,7 +18,7 @@ export class DB {
 		this.#data = []; // { decks: [], sections: [] };
 	}
 
-	async connect() {
+	async #connect() {
 		const jsonString = await readFile(DB.path, "utf8");
 		this.#data = JSON.parse(jsonString);
 	}
@@ -26,7 +26,7 @@ export class DB {
 	static async connection(): Promise<DB> {
 		if (this.instance == null || this.instance == undefined) {
 			this.instance = new DB();
-			await this.instance.connect();
+			await this.instance.#connect();
 		}
 
 		return this.instance;

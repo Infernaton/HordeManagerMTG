@@ -9,8 +9,8 @@ export class Section {
 
 	card_list: Array<Card>;
 
-	constructor(fetch: any) {
-		this.id = fetch.id;
+	constructor(id: number, fetch: any) {
+		this.id = id;
 		this.name = fetch.name;
 		this.description = fetch.name;
 		this.color = fetch.color;
@@ -18,13 +18,25 @@ export class Section {
 		this.card_list = fetch.card_list;
 	}
 
-	static create(name?: string, description?: string, color?: string) {
-		const data = { name, description, color, card_list: [] };
+	static async create(idDeck: number, name?: string, description?: string, color?: string) {
+		description = description || "";
+		color = color || "#aaaaaa";
 
-		return new Section(data);
+		const db = await DB.connection();
+
+		const arr = db.getSections(idDeck);
+		if (arr == undefined) throw new Error("Creating Section error - no deck found to create into");
+
+		const data = { name, description, color, card_list: [] };
+		const newSection = new Section(arr.length, data);
+
+		db.createSection(idDeck, newSection);
+
+		return newSection;
 	}
 
-	async addCards(db: DB, idDeck: number, ...cards: Array<Card>) {
+	async addCards(idDeck: number, ...cards: Array<Card>) {
+		const db = await DB.connection();
 		this.card_list.push(...cards);
 		db.updateSection(idDeck, this);
 	}

@@ -87,8 +87,8 @@ export const importBulk = async (req: Request, res: Response) => {
 					else {
 						let section = db.getSection(currentDeck.id, (e) => key == e.name);
 						// When a section is created, it hasn't an id yet
-						if (section == undefined) section = Section.create(key, "", "#aaaaaa");
-						section.addCards(db, currentDeck.id, card);
+						if (section == undefined) section = await Section.create(currentDeck.id, key, "", "#aaaaaa");
+						await section.addCards(currentDeck.id, card);
 					}
 				}
 			}

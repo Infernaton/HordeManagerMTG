@@ -1,5 +1,5 @@
 import express from "express";
-import phases from "./phases.js";
+import sections from "./sections.js";
 import {
 	createDeck,
 	deleteDeck,
@@ -11,16 +11,16 @@ import {
 
 const router = express.Router();
 
-router.use("/:id/phases", phases);
+router.use("/:id_deck/phases", sections);
 
 router.get("/", getAllDecks);
-router.get("/:id", getDeck);
+router.get("/:id_deck", getDeck);
 
 router.post("/new", createDeck);
-router.post("/:id/import", importBulk);
+router.post("/:id_deck/import", importBulk);
 
-router.patch("/:id", modifyDeck);
+router.patch("/:id_deck", modifyDeck);
 
-router.delete("/:id", deleteDeck);
+router.delete("/:id_deck", deleteDeck);
 
 export default router;

@@ -1,36 +1,36 @@
 import axios, { type AxiosResponse } from "axios";
 import type { Request, Response } from "express";
 import { Card } from "../models/Card.js";
-import type e from "express";
-import type { IDictionary } from "../models/interface.js";
 import { bulkReadFormat } from "../middleware/stringManipulation.js";
 import { DB } from "../db.js";
 import { Section } from "../models/Section.js";
 
 export const getAllDecks = async (req: Request, res: Response) => {
 	try {
-		res.status(200).json({ message: "success" });
+		const db = await DB.connection();
+		res.status(200).json({ decks: db.getDecks() });
 	} catch (error) {
-		res.status(404).json({ message: "fail" });
+		res.status(500).json({ message: "fail" });
 	}
 };
 export const getDeck = async (req: Request, res: Response) => {
 	try {
-		res.status(200).json({ message: "success" });
+		const db = await DB.connection();
+		res.status(200).json(db.getDeck(+`${req.params["id_deck"]}`));
 	} catch (error) {
 		res.status(404).json({ message: "fail" });
 	}
 };
 export const createDeck = async (req: Request, res: Response) => {
 	try {
-		res.status(200).json({ message: "success" });
+		res.status(200).json({ message: "comming soon" });
 	} catch (error) {
 		res.status(404).json({ message: "fail" });
 	}
 };
 export const modifyDeck = async (req: Request, res: Response) => {
 	try {
-		res.status(200).json({ message: "success" });
+		res.status(200).json({ message: "comming soon" });
 	} catch (error) {
 		res.status(404).json({ message: "fail" });
 	}
@@ -38,7 +38,7 @@ export const modifyDeck = async (req: Request, res: Response) => {
 
 export const deleteDeck = async (req: Request, res: Response) => {
 	try {
-		res.status(200).json({ message: "success" });
+		res.status(200).json({ message: "comming soon" });
 	} catch (error) {
 		res.status(404).json({ message: "fail" });
 	}
@@ -51,7 +51,7 @@ export const importBulk = async (req: Request, res: Response) => {
 		const { bulk }: { bulk: string } = req.body;
 
 		const db = await DB.connection();
-		const currentDeck = db.getDeck(+`${req.params["id"]}`);
+		const currentDeck = db.getDeck(+`${req.params["id_deck"]}`);
 		if (currentDeck == undefined) throw new Error("No deck was found");
 
 		// what the api call need

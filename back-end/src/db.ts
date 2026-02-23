@@ -8,6 +8,9 @@ import type { Card } from "./models/Card.js";
 // 	sections: Array<GlobalSection>;
 // }
 
+/**
+ * If data need to be updated, don't forget to call `DB.commit()` to commit the update to storage
+ */
 export class DB {
 	#data: Array<HordeDeck>;
 
@@ -112,7 +115,7 @@ export class DB {
 	}
 
 	getSectionById(idDeck: number, idSection: number): Section | undefined {
-		return this.getDeck(idDeck)?.sections.find((e) => e.id == idSection);
+		return this.getSection(idDeck, (e) => e.id == idSection);
 	}
 
 	getSection(idDeck: number, callback: (element: Section) => {}): Section | undefined {

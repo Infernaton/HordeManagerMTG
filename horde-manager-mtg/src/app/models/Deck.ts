@@ -1,11 +1,13 @@
-import type { Phase } from "./Phase";
+import { Card } from "./Card";
+import type { Section } from "./Section";
 
 export interface Deck {
-    id: Number;
-    name: String;
-    description: String;
-    image: URL;
+	id: number;
+	name: string;
+	description: string;
+	image: URL;
 
-    bosses: Phase;
-    phases: Array<Phase>;
+	bosses?: Section;
+	sections: Array<Section>;
+	unsorted?: Array<Card>;
 }

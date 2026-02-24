@@ -8,13 +8,19 @@ import PhaseCardList from "../components/PhaseCardList";
 function DeckList() {
 	const navigate = useNavigate();
 	const params = useParams();
-	const idDeck: Number = parseInt(params.id || "0");
+	const idDeck: number = parseInt(params.id || "0");
 	const [currentDeck, setCurrentDeck] = useState(Store.getObject("currentDeck") as Deck);
 
 	const updateDeck = (updated: Deck) => {
 		//Make API Call to update deck
 		setCurrentDeck(updated);
 		Store.setObject("currentDeck", updated);
+	};
+
+	const fetchDeck = async (idDeck: number) => {
+		const tmp = await Store.getDeck(idDeck);
+		setCurrentDeck(tmp || ({} as Deck));
+		Store.setObject("currentDeck", currentDeck);
 	};
 
 	// Do not work like intended
@@ -27,11 +33,7 @@ function DeckList() {
 			return;
 		}
 
-		// Make API Call to fetch with params.id
-		// const fetch = await ...
-		const tmp = Store.Decks.find((deck: Deck) => deck.id == idDeck);
-		setCurrentDeck(tmp || ({} as Deck));
-		Store.setObject("currentDeck", currentDeck);
+		fetchDeck(idDeck);
 	}, [idDeck]);
 
 	return (
@@ -48,9 +50,13 @@ function DeckList() {
 				{currentDeck?.bosses && currentDeck?.bosses?.card_list?.length > 0 && (
 					<PhaseCardList title="Boss" phase={currentDeck.bosses} />
 				)}
-				{currentDeck?.phases &&
-					currentDeck?.phases.map((phaseObj) => (
-						<PhaseCardList key={phaseObj.id as React.Key} title={`Phase ${phaseObj.id}`} phase={phaseObj} />
+				{currentDeck?.sections &&
+					currentDeck?.sections.map((sectionObj) => (
+						<PhaseCardList
+							key={sectionObj.id as React.Key}
+							title={`Phase ${sectionObj.id}`}
+							phase={sectionObj}
+						/>
 					))}
 			</div>
 		</div>

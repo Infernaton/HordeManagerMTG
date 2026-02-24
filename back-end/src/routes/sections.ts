@@ -6,15 +6,17 @@ import {
 	getSection,
 	modifySection,
 } from "../controllers/sectionsController.js";
+import { apiCall } from "../middleware/handler.js";
 
 const router = express.Router();
 
-router.get("/", getAllSections);
-router.get("/:id_section", getSection);
+router.get("/", (req, res) => apiCall(req, res, getAllSections));
 
-router.post("/new", createSection);
-router.patch("/:id_section", modifySection);
+router.get("/:id_section", (req, res) => apiCall(req, res, getSection));
 
-router.delete("/:id_section", deleteSection);
+router.post("/new", (req, res) => apiCall(req, res, createSection));
+router.patch("/:id_section", (req, res) => apiCall(req, res, modifySection));
+
+router.delete("/:id_section", (req, res) => apiCall(req, res, deleteSection));
 
 export default router;

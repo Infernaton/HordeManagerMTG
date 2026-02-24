@@ -1,15 +1,15 @@
-import { Phase } from "../models/Phase";
+import { Card } from "../models/Card";
+import { Section } from "../models/Section";
+import CardList from "./CardList";
 import "./components.css";
 
-function PhaseCardList({ title, phase }: { title: string; phase: Phase }) {
+function PhaseCardList({ title, phase }: { title: string; phase: Section }) {
 	return (
 		<div>
 			<h3>{title}</h3>
 			{phase?.description && <p>{phase?.description}</p>}
 			<hr />
-			<div className="card-container col7">
-				{phase?.card_list && phase?.card_list.map((cardObj) => <div>{cardObj.name}</div>)}
-			</div>
+			<CardList cardList={phase?.card_list} />
 		</div>
 	);
 }

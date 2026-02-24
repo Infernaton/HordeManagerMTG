@@ -1,8 +1,9 @@
 import ListDeckCard from "../components/ListDeckCard";
 import { Store } from "../store";
+import { useData } from "../middleware/handler";
 
-async function DeckList() {
-	const allDecks = await Store.getAllDecks();
+function DeckList() {
+	const decks = useData(Store.getAllDecks);
 	return (
 		<div className="Main-page">
 			<header className="Main-header">
@@ -11,9 +12,9 @@ async function DeckList() {
 			<div className="Main-body">
 				<hr />
 				<div className="card-container col3">
-					{allDecks.map((deck) => (
-						<ListDeckCard key={deck.id as React.Key} deck={deck} />
-					))}
+					{decks &&
+						decks.length > 0 &&
+						decks.map((deck) => <ListDeckCard key={deck.id as React.Key} deck={deck} />)}
 				</div>
 			</div>
 		</div>

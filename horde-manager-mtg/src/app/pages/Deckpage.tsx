@@ -1,40 +1,28 @@
-import { useEffect, useState } from "react";
-import { Deck } from "../models/Deck";
 import { Store } from "../store";
 import "./App.css";
 import { useNavigate, useParams } from "react-router";
 import PhaseCardList from "../components/PhaseCardList";
+import { useData } from "../middleware/handler";
+import { Deck } from "../models/Deck";
+
+/**
+ * Save the deck in local storage when clicked to use it to play
+ * @param deck
+ */
+const saveDeck = (deck: Deck) => {
+	Store.Local.setObject("currentDeck", deck);
+};
 
 function DeckList() {
 	const navigate = useNavigate();
+
 	const params = useParams();
 	const idDeck: number = parseInt(params.id || "0");
-	const [currentDeck, setCurrentDeck] = useState(Store.getObject("currentDeck") as Deck);
-
-	const updateDeck = (updated: Deck) => {
-		//Make API Call to update deck
-		setCurrentDeck(updated);
-		Store.setObject("currentDeck", updated);
-	};
-
-	const fetchDeck = async (idDeck: number) => {
-		const tmp = await Store.getDeck(idDeck);
-		setCurrentDeck(tmp || ({} as Deck));
-		Store.setObject("currentDeck", currentDeck);
-	};
-
-	// Do not work like intended
-	// currentDeck in not updated correctly OR data display is priorise and crash the app
-	useEffect(() => {
-		if (currentDeck != null && currentDeck.id == idDeck) return;
-
-		if (idDeck == 0) {
-			navigate("/", { replace: true });
-			return;
-		}
-
-		fetchDeck(idDeck);
-	}, [idDeck]);
+	if (idDeck == 0) {
+		navigate("/", { replace: true });
+		return;
+	}
+	const currentDeck = useData(Store.getDeck, idDeck);
 
 	return (
 		<div className="Main-page">
@@ -54,7 +42,7 @@ function DeckList() {
 					currentDeck?.sections.map((sectionObj) => (
 						<PhaseCardList
 							key={sectionObj.id as React.Key}
-							title={`Phase ${sectionObj.id}`}
+							title={`${sectionObj.name ?? `Phase ${sectionObj.id}`}`}
 							phase={sectionObj}
 						/>
 					))}

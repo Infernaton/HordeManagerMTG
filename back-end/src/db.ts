@@ -14,7 +14,7 @@ import type { Card } from "./models/Card.js";
 export class DB {
 	#data: Array<HordeDeck>;
 
-	static path: string = "./db.example.json";
+	static path: string = "./db.json";
 	static instance: DB;
 
 	constructor() {

@@ -22,7 +22,10 @@ export const bulkReadFormat = (entry: string): IBulkReturn => {
 			// s[1].substring(s[1].indexOf("/")) is about split card not finding by Scryfall api
 			// -> we will receive a card like "Wear/Tear" and only send the "/Tear" part to search for
 			// For normal card, it will not modify
-			if (s[1] != undefined) apiCallBody.push({ name: s[1].substring(s[1].indexOf("/")) });
+			// Additionnaly prevent to push multiple instance of the same card name into the call
+			// (if multiple instance happend to be present among other section)
+			if (s[1] != undefined && apiCallBody.find((e) => e.name == s[1].substring(s[1].indexOf("/"))) == undefined)
+				apiCallBody.push({ name: s[1].substring(s[1].indexOf("/")) });
 		});
 
 		// if the first element of the split don't have a number as a first character, it means a section name

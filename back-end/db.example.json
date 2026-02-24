@@ -12,29 +12,350 @@
 			"card_list": [
 				{
 					"id": "f0d31ae7-8580-402a-a917-3d626a9e1f49",
-					"name": "Brimaz, Blight of Oreskos",
-					"mana_cost": "{2}{W}{B}",
-					"type_line": "Legendary Creature — Phyrexian Cat",
-					"oracle_text": "Whenever you cast a Phyrexian creature or artifact creature spell, incubate X, where X is that spell's mana value. (Create an Incubator token with X +1/+1 counters on it and \"{2}: Transform this token.\" It transforms into a 0/0 Phyrexian artifact creature.)\nAt the beginning of each end step, if a Phyrexian died under your control this turn, proliferate.",
-					"power": "3",
-					"toughness": "4",
-					"crop_image": "https://cards.scryfall.io/art_crop/front/f/0/f0d31ae7-8580-402a-a917-3d626a9e1f49.jpg?1682207211",
-					"full_image": "https://cards.scryfall.io/normal/front/f/0/f0d31ae7-8580-402a-a917-3d626a9e1f49.jpg?1682207211"
+					"layout": "normal",
+					"front_card": {
+						"name": "Brimaz, Blight of Oreskos",
+						"mana_cost": "{2}{W}{B}",
+						"type_line": "Legendary Creature — Phyrexian Cat",
+						"oracle_text": "Whenever you cast a Phyrexian creature or artifact creature spell, incubate X, where X is that spell's mana value. (Create an Incubator token with X +1/+1 counters on it and \"{2}: Transform this token.\" It transforms into a 0/0 Phyrexian artifact creature.)\nAt the beginning of each end step, if a Phyrexian died under your control this turn, proliferate.",
+						"crop_image": "https://cards.scryfall.io/art_crop/front/f/0/f0d31ae7-8580-402a-a917-3d626a9e1f49.jpg?1682207211",
+						"full_image": "https://cards.scryfall.io/normal/front/f/0/f0d31ae7-8580-402a-a917-3d626a9e1f49.jpg?1682207211",
+						"power": "3",
+						"toughness": "4"
+					}
 				},
 				{
 					"id": "6c299066-dfdd-47a3-85e6-225508ba95fe",
-					"name": "Glissa, Herald of Predation",
-					"mana_cost": "{3}{B}{G}",
-					"type_line": "Legendary Creature — Phyrexian Zombie Elf",
-					"oracle_text": "At the beginning of combat on your turn, choose one —\n• Incubate 2 twice. (To incubate 2, create an Incubator token with two +1/+1 counters on it and \"{2}: Transform this token.\" It transforms into a 0/0 Phyrexian artifact creature.)\n• Transform all Incubator tokens you control.\n• Phyrexians you control gain first strike and deathtouch until end of turn.",
-					"power": "3",
-					"toughness": "5",
-					"crop_image": "https://cards.scryfall.io/art_crop/front/6/c/6c299066-dfdd-47a3-85e6-225508ba95fe.jpg?1682205268",
-					"full_image": "https://cards.scryfall.io/normal/front/6/c/6c299066-dfdd-47a3-85e6-225508ba95fe.jpg?1682205268"
+					"layout": "normal",
+					"front_card": {
+						"name": "Glissa, Herald of Predation",
+						"mana_cost": "{3}{B}{G}",
+						"type_line": "Legendary Creature — Phyrexian Zombie Elf",
+						"oracle_text": "At the beginning of combat on your turn, choose one —\n• Incubate 2 twice. (To incubate 2, create an Incubator token with two +1/+1 counters on it and \"{2}: Transform this token.\" It transforms into a 0/0 Phyrexian artifact creature.)\n• Transform all Incubator tokens you control.\n• Phyrexians you control gain first strike and deathtouch until end of turn.",
+						"crop_image": "https://cards.scryfall.io/art_crop/front/6/c/6c299066-dfdd-47a3-85e6-225508ba95fe.jpg?1682205268",
+						"full_image": "https://cards.scryfall.io/normal/front/6/c/6c299066-dfdd-47a3-85e6-225508ba95fe.jpg?1682205268",
+						"power": "3",
+						"toughness": "5"
+					}
+				},
+				{
+					"id": "a469d7ec-42de-45de-9d8f-469bb979de58",
+					"layout": "meld",
+					"front_card": {
+						"name": "Mishra, Claimed by Gix",
+						"mana_cost": "{2}{B}{R}",
+						"type_line": "Legendary Creature — Phyrexian Human Artificer",
+						"oracle_text": "Whenever you attack, each opponent loses X life and you gain X life, where X is the number of attacking creatures. If Mishra, Claimed by Gix and a creature named Phyrexian Dragon Engine are attacking, and you both own and control them, exile them, then meld them into Mishra, Lost to Phyrexia. It enters tapped and attacking.",
+						"crop_image": "https://cards.scryfall.io/art_crop/front/a/4/a469d7ec-42de-45de-9d8f-469bb979de58.jpg?1736927322",
+						"full_image": "https://cards.scryfall.io/normal/front/a/4/a469d7ec-42de-45de-9d8f-469bb979de58.jpg?1736927322",
+						"power": "3",
+						"toughness": "5"
+					}
+				},
+				{
+					"id": "fb1d33b2-9082-4043-8e52-a5c2f3a174ba",
+					"layout": "normal",
+					"front_card": {
+						"name": "Vishgraz, the Doomhive",
+						"mana_cost": "{2}{W}{B}{G}",
+						"type_line": "Legendary Creature — Phyrexian Insect",
+						"oracle_text": "Menace, toxic 1 (Players dealt combat damage by this creature also get a poison counter.)\nWhen Vishgraz enters, create three 1/1 colorless Phyrexian Mite artifact creature tokens with toxic 1 and \"This token can't block.\"\nVishgraz gets +1/+1 for each poison counter your opponents have.",
+						"crop_image": "https://cards.scryfall.io/art_crop/front/f/b/fb1d33b2-9082-4043-8e52-a5c2f3a174ba.jpg?1738281245",
+						"full_image": "https://cards.scryfall.io/normal/front/f/b/fb1d33b2-9082-4043-8e52-a5c2f3a174ba.jpg?1738281245",
+						"power": "3",
+						"toughness": "3"
+					}
 				}
 			]
 		},
-		"sections": [{ "id": 1, "color": "green", "description": "", "card_list": [] }],
+		"sections": [
+			{
+				"id": 0,
+				"name": "Phase1",
+				"description": "Phase1",
+				"color": "#aaaaaa",
+				"card_list": [
+					{
+						"id": "d387b608-ba4e-49c8-bd81-37594290a352",
+						"layout": "normal",
+						"front_card": {
+							"name": "Norn's Inquisitor",
+							"mana_cost": "{1}{W}",
+							"type_line": "Creature — Phyrexian Knight",
+							"oracle_text": "When this creature enters, incubate 2. (Create an Incubator token with two +1/+1 counters on it and \"{2}: Transform this token.\" It transforms into a 0/0 Phyrexian artifact creature.)\nWhenever a permanent you control transforms into a Phyrexian, put a +1/+1 counter on it.",
+							"crop_image": "https://cards.scryfall.io/art_crop/front/d/3/d387b608-ba4e-49c8-bd81-37594290a352.jpg?1682202784",
+							"full_image": "https://cards.scryfall.io/normal/front/d/3/d387b608-ba4e-49c8-bd81-37594290a352.jpg?1682202784",
+							"power": "1",
+							"toughness": "1"
+						}
+					},
+					{
+						"id": "d387b608-ba4e-49c8-bd81-37594290a352",
+						"layout": "normal",
+						"front_card": {
+							"name": "Norn's Inquisitor",
+							"mana_cost": "{1}{W}",
+							"type_line": "Creature — Phyrexian Knight",
+							"oracle_text": "When this creature enters, incubate 2. (Create an Incubator token with two +1/+1 counters on it and \"{2}: Transform this token.\" It transforms into a 0/0 Phyrexian artifact creature.)\nWhenever a permanent you control transforms into a Phyrexian, put a +1/+1 counter on it.",
+							"crop_image": "https://cards.scryfall.io/art_crop/front/d/3/d387b608-ba4e-49c8-bd81-37594290a352.jpg?1682202784",
+							"full_image": "https://cards.scryfall.io/normal/front/d/3/d387b608-ba4e-49c8-bd81-37594290a352.jpg?1682202784",
+							"power": "1",
+							"toughness": "1"
+						}
+					},
+					{
+						"id": "d387b608-ba4e-49c8-bd81-37594290a352",
+						"layout": "normal",
+						"front_card": {
+							"name": "Norn's Inquisitor",
+							"mana_cost": "{1}{W}",
+							"type_line": "Creature — Phyrexian Knight",
+							"oracle_text": "When this creature enters, incubate 2. (Create an Incubator token with two +1/+1 counters on it and \"{2}: Transform this token.\" It transforms into a 0/0 Phyrexian artifact creature.)\nWhenever a permanent you control transforms into a Phyrexian, put a +1/+1 counter on it.",
+							"crop_image": "https://cards.scryfall.io/art_crop/front/d/3/d387b608-ba4e-49c8-bd81-37594290a352.jpg?1682202784",
+							"full_image": "https://cards.scryfall.io/normal/front/d/3/d387b608-ba4e-49c8-bd81-37594290a352.jpg?1682202784",
+							"power": "1",
+							"toughness": "1"
+						}
+					},
+					{
+						"id": "0ee40c4b-2ca3-4cda-bc9e-451455c17adc",
+						"layout": "transform",
+						"front_card": {
+							"name": "Pyretic Prankster",
+							"mana_cost": "{1}{R}",
+							"type_line": "Creature — Devil",
+							"oracle_text": "{3}{B/P}: Transform this creature. Activate only as a sorcery. ({B/P} can be paid with either {B} or 2 life.)",
+							"crop_image": "https://cards.scryfall.io/art_crop/front/0/e/0ee40c4b-2ca3-4cda-bc9e-451455c17adc.jpg?1739663272",
+							"full_image": "https://cards.scryfall.io/normal/front/0/e/0ee40c4b-2ca3-4cda-bc9e-451455c17adc.jpg?1739663272",
+							"power": "2",
+							"toughness": "1"
+						},
+						"back_card": {
+							"name": "Glistening Goremonger",
+							"mana_cost": "",
+							"type_line": "Creature — Phyrexian Devil",
+							"oracle_text": "When this creature dies, each opponent sacrifices an artifact or creature of their choice.",
+							"crop_image": "https://cards.scryfall.io/art_crop/back/0/e/0ee40c4b-2ca3-4cda-bc9e-451455c17adc.jpg?1739663272",
+							"full_image": "https://cards.scryfall.io/normal/back/0/e/0ee40c4b-2ca3-4cda-bc9e-451455c17adc.jpg?1739663272",
+							"power": "3",
+							"toughness": "2"
+						}
+					},
+					{
+						"id": "0ee40c4b-2ca3-4cda-bc9e-451455c17adc",
+						"layout": "transform",
+						"front_card": {
+							"name": "Pyretic Prankster",
+							"mana_cost": "{1}{R}",
+							"type_line": "Creature — Devil",
+							"oracle_text": "{3}{B/P}: Transform this creature. Activate only as a sorcery. ({B/P} can be paid with either {B} or 2 life.)",
+							"crop_image": "https://cards.scryfall.io/art_crop/front/0/e/0ee40c4b-2ca3-4cda-bc9e-451455c17adc.jpg?1739663272",
+							"full_image": "https://cards.scryfall.io/normal/front/0/e/0ee40c4b-2ca3-4cda-bc9e-451455c17adc.jpg?1739663272",
+							"power": "2",
+							"toughness": "1"
+						},
+						"back_card": {
+							"name": "Glistening Goremonger",
+							"mana_cost": "",
+							"type_line": "Creature — Phyrexian Devil",
+							"oracle_text": "When this creature dies, each opponent sacrifices an artifact or creature of their choice.",
+							"crop_image": "https://cards.scryfall.io/art_crop/back/0/e/0ee40c4b-2ca3-4cda-bc9e-451455c17adc.jpg?1739663272",
+							"full_image": "https://cards.scryfall.io/normal/back/0/e/0ee40c4b-2ca3-4cda-bc9e-451455c17adc.jpg?1739663272",
+							"power": "3",
+							"toughness": "2"
+						}
+					},
+					{
+						"id": "0ee40c4b-2ca3-4cda-bc9e-451455c17adc",
+						"layout": "transform",
+						"front_card": {
+							"name": "Pyretic Prankster",
+							"mana_cost": "{1}{R}",
+							"type_line": "Creature — Devil",
+							"oracle_text": "{3}{B/P}: Transform this creature. Activate only as a sorcery. ({B/P} can be paid with either {B} or 2 life.)",
+							"crop_image": "https://cards.scryfall.io/art_crop/front/0/e/0ee40c4b-2ca3-4cda-bc9e-451455c17adc.jpg?1739663272",
+							"full_image": "https://cards.scryfall.io/normal/front/0/e/0ee40c4b-2ca3-4cda-bc9e-451455c17adc.jpg?1739663272",
+							"power": "2",
+							"toughness": "1"
+						},
+						"back_card": {
+							"name": "Glistening Goremonger",
+							"mana_cost": "",
+							"type_line": "Creature — Phyrexian Devil",
+							"oracle_text": "When this creature dies, each opponent sacrifices an artifact or creature of their choice.",
+							"crop_image": "https://cards.scryfall.io/art_crop/back/0/e/0ee40c4b-2ca3-4cda-bc9e-451455c17adc.jpg?1739663272",
+							"full_image": "https://cards.scryfall.io/normal/back/0/e/0ee40c4b-2ca3-4cda-bc9e-451455c17adc.jpg?1739663272",
+							"power": "3",
+							"toughness": "2"
+						}
+					},
+					{
+						"id": "0ee40c4b-2ca3-4cda-bc9e-451455c17adc",
+						"layout": "transform",
+						"front_card": {
+							"name": "Pyretic Prankster",
+							"mana_cost": "{1}{R}",
+							"type_line": "Creature — Devil",
+							"oracle_text": "{3}{B/P}: Transform this creature. Activate only as a sorcery. ({B/P} can be paid with either {B} or 2 life.)",
+							"crop_image": "https://cards.scryfall.io/art_crop/front/0/e/0ee40c4b-2ca3-4cda-bc9e-451455c17adc.jpg?1739663272",
+							"full_image": "https://cards.scryfall.io/normal/front/0/e/0ee40c4b-2ca3-4cda-bc9e-451455c17adc.jpg?1739663272",
+							"power": "2",
+							"toughness": "1"
+						},
+						"back_card": {
+							"name": "Glistening Goremonger",
+							"mana_cost": "",
+							"type_line": "Creature — Phyrexian Devil",
+							"oracle_text": "When this creature dies, each opponent sacrifices an artifact or creature of their choice.",
+							"crop_image": "https://cards.scryfall.io/art_crop/back/0/e/0ee40c4b-2ca3-4cda-bc9e-451455c17adc.jpg?1739663272",
+							"full_image": "https://cards.scryfall.io/normal/back/0/e/0ee40c4b-2ca3-4cda-bc9e-451455c17adc.jpg?1739663272",
+							"power": "3",
+							"toughness": "2"
+						}
+					},
+					{
+						"id": "a9225cc3-90f0-448f-a8d9-7c6c2796d077",
+						"layout": "normal",
+						"front_card": {
+							"name": "Sheoldred's Edict",
+							"mana_cost": "{1}{B}",
+							"type_line": "Instant",
+							"oracle_text": "Choose one —\n• Each opponent sacrifices a nontoken creature of their choice.\n• Each opponent sacrifices a creature token of their choice.\n• Each opponent sacrifices a planeswalker of their choice.",
+							"crop_image": "https://cards.scryfall.io/art_crop/front/a/9/a9225cc3-90f0-448f-a8d9-7c6c2796d077.jpg?1675957049",
+							"full_image": "https://cards.scryfall.io/normal/front/a/9/a9225cc3-90f0-448f-a8d9-7c6c2796d077.jpg?1675957049"
+						}
+					},
+					{
+						"id": "a9225cc3-90f0-448f-a8d9-7c6c2796d077",
+						"layout": "normal",
+						"front_card": {
+							"name": "Sheoldred's Edict",
+							"mana_cost": "{1}{B}",
+							"type_line": "Instant",
+							"oracle_text": "Choose one —\n• Each opponent sacrifices a nontoken creature of their choice.\n• Each opponent sacrifices a creature token of their choice.\n• Each opponent sacrifices a planeswalker of their choice.",
+							"crop_image": "https://cards.scryfall.io/art_crop/front/a/9/a9225cc3-90f0-448f-a8d9-7c6c2796d077.jpg?1675957049",
+							"full_image": "https://cards.scryfall.io/normal/front/a/9/a9225cc3-90f0-448f-a8d9-7c6c2796d077.jpg?1675957049"
+						}
+					},
+					{
+						"id": "a9225cc3-90f0-448f-a8d9-7c6c2796d077",
+						"layout": "normal",
+						"front_card": {
+							"name": "Sheoldred's Edict",
+							"mana_cost": "{1}{B}",
+							"type_line": "Instant",
+							"oracle_text": "Choose one —\n• Each opponent sacrifices a nontoken creature of their choice.\n• Each opponent sacrifices a creature token of their choice.\n• Each opponent sacrifices a planeswalker of their choice.",
+							"crop_image": "https://cards.scryfall.io/art_crop/front/a/9/a9225cc3-90f0-448f-a8d9-7c6c2796d077.jpg?1675957049",
+							"full_image": "https://cards.scryfall.io/normal/front/a/9/a9225cc3-90f0-448f-a8d9-7c6c2796d077.jpg?1675957049"
+						}
+					},
+					{
+						"id": "a9225cc3-90f0-448f-a8d9-7c6c2796d077",
+						"layout": "normal",
+						"front_card": {
+							"name": "Sheoldred's Edict",
+							"mana_cost": "{1}{B}",
+							"type_line": "Instant",
+							"oracle_text": "Choose one —\n• Each opponent sacrifices a nontoken creature of their choice.\n• Each opponent sacrifices a creature token of their choice.\n• Each opponent sacrifices a planeswalker of their choice.",
+							"crop_image": "https://cards.scryfall.io/art_crop/front/a/9/a9225cc3-90f0-448f-a8d9-7c6c2796d077.jpg?1675957049",
+							"full_image": "https://cards.scryfall.io/normal/front/a/9/a9225cc3-90f0-448f-a8d9-7c6c2796d077.jpg?1675957049"
+						}
+					},
+					{
+						"id": "b11037bc-e719-461e-a89e-9c026dfd9fd4",
+						"layout": "normal",
+						"front_card": {
+							"name": "Evacuation",
+							"mana_cost": "{3}{U}{U}",
+							"type_line": "Instant",
+							"oracle_text": "Return all creatures to their owners' hands.",
+							"crop_image": "https://cards.scryfall.io/art_crop/front/b/1/b11037bc-e719-461e-a89e-9c026dfd9fd4.jpg?1698988153",
+							"full_image": "https://cards.scryfall.io/normal/front/b/1/b11037bc-e719-461e-a89e-9c026dfd9fd4.jpg?1698988153"
+						}
+					}
+				]
+			},
+			{
+				"id": 1,
+				"name": "Phase2",
+				"description": "Phase2",
+				"color": "#aaaaaa",
+				"card_list": [
+					{
+						"id": "b11037bc-e719-461e-a89e-9c026dfd9fd4",
+						"layout": "normal",
+						"front_card": {
+							"name": "Evacuation",
+							"mana_cost": "{3}{U}{U}",
+							"type_line": "Instant",
+							"oracle_text": "Return all creatures to their owners' hands.",
+							"crop_image": "https://cards.scryfall.io/art_crop/front/b/1/b11037bc-e719-461e-a89e-9c026dfd9fd4.jpg?1698988153",
+							"full_image": "https://cards.scryfall.io/normal/front/b/1/b11037bc-e719-461e-a89e-9c026dfd9fd4.jpg?1698988153"
+						}
+					},
+					{
+						"id": "ea00d757-0ea9-4123-89f6-0a437d7fd33d",
+						"layout": "normal",
+						"front_card": {
+							"name": "Anthem of Rakdos",
+							"mana_cost": "{2}{B}{R}{R}",
+							"type_line": "Enchantment",
+							"oracle_text": "Whenever a creature you control attacks, it gets +2/+0 until end of turn and this enchantment deals 1 damage to you.\nHellbent — As long as you have no cards in hand, if a source you control would deal damage to a permanent or player, it deals double that damage to that permanent or player instead.",
+							"crop_image": "https://cards.scryfall.io/art_crop/front/e/a/ea00d757-0ea9-4123-89f6-0a437d7fd33d.jpg?1593273540",
+							"full_image": "https://cards.scryfall.io/normal/front/e/a/ea00d757-0ea9-4123-89f6-0a437d7fd33d.jpg?1593273540"
+						}
+					},
+					{
+						"id": "ea00d757-0ea9-4123-89f6-0a437d7fd33d",
+						"layout": "normal",
+						"front_card": {
+							"name": "Anthem of Rakdos",
+							"mana_cost": "{2}{B}{R}{R}",
+							"type_line": "Enchantment",
+							"oracle_text": "Whenever a creature you control attacks, it gets +2/+0 until end of turn and this enchantment deals 1 damage to you.\nHellbent — As long as you have no cards in hand, if a source you control would deal damage to a permanent or player, it deals double that damage to that permanent or player instead.",
+							"crop_image": "https://cards.scryfall.io/art_crop/front/e/a/ea00d757-0ea9-4123-89f6-0a437d7fd33d.jpg?1593273540",
+							"full_image": "https://cards.scryfall.io/normal/front/e/a/ea00d757-0ea9-4123-89f6-0a437d7fd33d.jpg?1593273540"
+						}
+					},
+					{
+						"id": "157cf43c-f7f2-4362-bfc8-11682e94b747",
+						"layout": "normal",
+						"front_card": {
+							"name": "Tyrranax Atrocity",
+							"mana_cost": "{3}{G}{G}",
+							"type_line": "Creature — Phyrexian Dinosaur",
+							"oracle_text": "Haste\nToxic 3 (Players dealt combat damage by this creature also get three poison counters.)",
+							"crop_image": "https://cards.scryfall.io/art_crop/front/1/5/157cf43c-f7f2-4362-bfc8-11682e94b747.jpg?1675957171",
+							"full_image": "https://cards.scryfall.io/normal/front/1/5/157cf43c-f7f2-4362-bfc8-11682e94b747.jpg?1675957171",
+							"power": "4",
+							"toughness": "4"
+						}
+					}
+				]
+			},
+			{
+				"id": 2,
+				"name": "Phase3",
+				"description": "Phase3",
+				"color": "#aaaaaa",
+				"card_list": [
+					{
+						"id": "e00c55f4-676f-40dc-a7f7-a53f07dd3107",
+						"layout": "normal",
+						"front_card": {
+							"name": "Blight Titan",
+							"mana_cost": "{4}{B}{B}",
+							"type_line": "Creature — Phyrexian Giant",
+							"oracle_text": "Deathtouch\nWhenever this creature enters or attacks, mill two cards, then incubate X, where X is the number of creature cards in your graveyard. (Create an Incubator token with X +1/+1 counters on it and \"{2}: Transform this token.\" It transforms into a 0/0 Phyrexian artifact creature.)",
+							"crop_image": "https://cards.scryfall.io/art_crop/front/e/0/e00c55f4-676f-40dc-a7f7-a53f07dd3107.jpg?1682207419",
+							"full_image": "https://cards.scryfall.io/normal/front/e/0/e00c55f4-676f-40dc-a7f7-a53f07dd3107.jpg?1682207419",
+							"power": "6",
+							"toughness": "6"
+						}
+					}
+				]
+			}
+		],
 		"unsorted": []
 	},
 	{

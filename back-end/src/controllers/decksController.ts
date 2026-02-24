@@ -66,8 +66,8 @@ export const importBulk = async (req: Request, res: Response) => {
 				}),
 			);
 		}
-
 		const data = await Promise.all(fetches);
+
 		const filteredData = data.map((d) => d.data);
 		const found = filteredData.flatMap((e) => e.data);
 		const notFound = filteredData.flatMap((e) => e.not_found);
@@ -79,14 +79,15 @@ export const importBulk = async (req: Request, res: Response) => {
 			for (const [key, value] of Object.entries(sortedCard)) {
 				// key -> name of the part
 				// value -> all the card name from that part
-				const fullCardName = card.front_card.name + (card.back_card ? "/" + card.back_card.name : "");
+				const fullCardName = card.front_card.name + (card.back_card ? " / " + card.back_card.name : "");
+				// console.log(fullCardName, value);
 				if (value[fullCardName] == undefined) continue;
 
 				for (let o = 0; o < value[fullCardName]; o++) {
-					if (/[0-9]/.test(key)) db.addUnsortedCard(currentDeck.id, card);
+					// Meaning it hasn't a clear section name, don't know how to sort the card
+					if (/^[0-9]$/gm.test(key)) db.addUnsortedCard(currentDeck.id, card);
 					else {
 						let section = db.getSection(currentDeck.id, (e) => key == e.name);
-						// When a section is created, it hasn't an id yet
 						if (section == undefined) section = await Section.create(currentDeck.id, key, "", "#aaaaaa");
 						await section.addCards(currentDeck.id, card);
 					}

@@ -18,7 +18,7 @@ router.get("/", (req, res) => apiCall(req, res, getAllDecks));
 router.get("/:id_deck", (req, res) => apiCall(req, res, getDeck));
 
 router.post("/new", (req, res) => apiCall(req, res, createDeck));
-router.post("/id_deck/import", (req, res) => apiCall(req, res, importBulk));
+router.post("/:id_deck/import", (req, res) => apiCall(req, res, importBulk));
 
 router.patch("/:id_deck", (req, res) => apiCall(req, res, modifyDeck));
 

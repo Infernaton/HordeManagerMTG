@@ -13,7 +13,7 @@ class CardFace {
 		this.type_line = fetch.type_line;
 		this.oracle_text = fetch.oracle_text;
 		this.crop_image = new URL(image_uris.art_crop);
-		this.full_image = new URL(image_uris.normal);
+		this.full_image = new URL(image_uris.border_crop);
 	}
 
 	static new(fetch: any, image_uris: any): CardFace {

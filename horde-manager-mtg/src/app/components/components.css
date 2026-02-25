@@ -22,3 +22,95 @@
         text-align: center;
     }
 }
+
+.card {
+    position: relative;
+    perspective: 50em;
+    transition: all 0.4s;
+    z-index: 1;
+
+    .card-content {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 7 / 10;
+        transition: all 0.4s;
+        text-align: center;
+        transform-style: preserve-3d;
+
+        .front-card,
+        .back-card {
+            position: absolute;
+            width: 100%;
+            border-radius: 5px;
+            -webkit-backface-visibility: hidden;
+            /* Safari */
+            backface-visibility: hidden;
+
+            &.rotate {
+                animation: rotateLeft 1s;
+            }
+        }
+
+        &.rotate,
+        .back-card {
+            transform: rotateY(180deg);
+        }
+
+        img {
+            width: 100%;
+        }
+
+        .onCard {
+            position: absolute;
+            z-index: 4;
+
+            &>* {
+                background-color: var(--main-color);
+                border: var(--background-light-gray-color) 1px solid;
+                border-radius: 7px;
+                text-align: center;
+                color: var(--background-light-gray-color);
+            }
+        }
+
+        .occurence {
+            top: 2em;
+            right: 1em;
+            font-weight: 700;
+            -webkit-backface-visibility: hidden;
+            /* Safari */
+            backface-visibility: hidden;
+
+            &>* {
+                padding: 0.15em 0.5em;
+            }
+        }
+
+        .revertCard {
+            left: 50%;
+            top: 48%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            /* virtually increase size of the button */
+            padding: 0.5em;
+
+            &>* {
+                padding: 4px 8px;
+                cursor: pointer;
+            }
+        }
+    }
+
+    &:hover {
+        z-index: 2;
+
+        .card-content {
+            scale: 1.15;
+
+            .front-card {
+                z-index: 3;
+            }
+        }
+    }
+
+}

@@ -1,4 +1,6 @@
+import "./components.css";
 import { Card } from "../models/Card";
+import CardDisplay from "./Card";
 
 interface CardDisplay {
 	id: string;
@@ -21,19 +23,11 @@ function CardList({ cardList }: { cardList: Card[] }) {
 		}
 	}
 	return (
-		<div>
-			<div className="card-container col7">
-				{uniqueCard.length > 0 &&
-					uniqueCard.map((cardObj) => (
-						<div key={cardObj.id}>
-							<img
-								src={cardObj.card_data.front_card.full_image.toString()}
-								alt={cardObj.card_data.front_card.name}
-							/>
-							{cardObj.card_data.front_card.name} //// {cardObj.occurence}
-						</div>
-					))}
-			</div>
+		<div className="card-container col7">
+			{uniqueCard.length > 0 &&
+				uniqueCard.map((cardObj) => (
+					<CardDisplay key={cardObj.id} card={cardObj.card_data} occurence={cardObj.occurence} />
+				))}
 		</div>
 	);
 }

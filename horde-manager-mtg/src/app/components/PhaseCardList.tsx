@@ -1,4 +1,3 @@
-import { Card } from "../models/Card";
 import { Section } from "../models/Section";
 import CardList from "./CardList";
 import "./components.css";
@@ -6,7 +5,9 @@ import "./components.css";
 function PhaseCardList({ title, phase }: { title: string; phase: Section }) {
 	return (
 		<div>
-			<h3>{title}</h3>
+			<h3>
+				{title} <span>({phase.card_list.length} cards)</span>
+			</h3>
 			{phase?.description && <p>{phase?.description}</p>}
 			<hr />
 			<CardList cardList={phase?.card_list} />

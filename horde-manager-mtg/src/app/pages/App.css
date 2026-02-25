@@ -70,19 +70,19 @@
   align-content: flex-start;
 
   &>* {
-    margin: 0.5em;
-    width: calc(100% / 2 - 1em);
+    margin: 0.25em;
+    width: calc(100% / 2 - 0.5em);
   }
 
   &.col3>* {
-    width: calc(100% / 3 - 1em);
+    width: calc(100% / 3 - 0.5em);
   }
 
   &.col5>* {
-    width: calc(100% / 5 - 1em);
+    width: calc(100% / 5 - 0.5em);
   }
 
   &.col7>* {
-    width: calc(100% / 7 - 1em);
+    width: calc(100% / 7 - 0.5em);
   }
 }

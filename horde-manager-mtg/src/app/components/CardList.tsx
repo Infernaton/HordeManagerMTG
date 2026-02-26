@@ -1,6 +1,6 @@
 import "./components.css";
 import { Card } from "../models/Card";
-import CardDisplay from "./Card";
+import CardDisplay from "./CardShowcase";
 
 interface CardDisplay {
 	id: string;

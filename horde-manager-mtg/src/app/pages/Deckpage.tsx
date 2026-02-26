@@ -1,9 +1,10 @@
 import { Store } from "../store";
 import "./App.css";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import PhaseCardList from "../components/PhaseCardList";
 import { useData } from "../middleware/handler";
 import { Deck } from "../models/Deck";
+import { useEffect, useState } from "react";
 
 /**
  * Save the deck in local storage when clicked to use it to play
@@ -46,6 +47,15 @@ function DeckList() {
 							phase={sectionObj}
 						/>
 					))}
+				<div className="sticky-bottom">
+					<div className="Play-button">
+						<Link to={{ pathname: `/deck/${currentDeck?.id}/play` }}>
+							<div className="button" onClick={() => saveDeck(currentDeck)}>
+								PLAY
+							</div>
+						</Link>
+					</div>
+				</div>
 			</div>
 		</div>
 	);

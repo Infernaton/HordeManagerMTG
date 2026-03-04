@@ -1,19 +1,39 @@
 import "./components.css";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Card } from "../models/Card";
 
-function CardDisplay({ card, occurence }: { card: Card; occurence: number }) {
-	const [isFrontSide, setIsFrontSide] = useState(true);
-	const cardElementID = "card-image-" + card.id;
-	const changeSide = () => {
-		const img = document.getElementById(cardElementID);
+function CardDisplay({
+	card,
+	occurence,
+	colorBack,
+	frontFaceVisible,
+	visibleArrow,
+}: {
+	card: Card;
+	occurence: number;
+	colorBack?: string;
+	frontFaceVisible?: boolean;
+	visibleArrow?: boolean;
+}) {
+	const [isFrontFaceSide, setIsFrontFaceSide] = useState(true);
+	const [isFrontSide, setIsFrontSide] = useState(frontFaceVisible ?? true);
+
+	const seeArrowButton = visibleArrow ?? true;
+
+	const changeSide = () => setIsFrontFaceSide(!isFrontFaceSide);
+	const returnCard = () => {
+		console.log("test", isFrontSide);
 		setIsFrontSide(!isFrontSide);
-		if (isFrontSide) img?.classList.add("rotate");
-		else img?.classList.remove("rotate");
 	};
+	let backSide = null;
+	if (colorBack != undefined) {
+		const backgroundCover = { "--background-color": colorBack } as React.CSSProperties;
+		backSide = <div className="card-back-side" style={backgroundCover}></div>;
+	}
+
 	return (
-		<div className="card">
-			<div className="card-content" id={cardElementID}>
+		<div className={"card" + (isFrontSide ? "" : " rotate")}>
+			<div className={"card-content" + (isFrontFaceSide ? "" : "rotate")}>
 				<div className="front-card">
 					<img src={card.front_card.full_image.toString()} alt={card.front_card.name} />
 				</div>
@@ -27,12 +47,18 @@ function CardDisplay({ card, occurence }: { card: Card; occurence: number }) {
 						<div>x {occurence}</div>
 					</div>
 				)}
-				{card.back_card && (
+				{card.back_card && seeArrowButton && (
 					<div className="revertCard onCard" onClick={changeSide}>
 						<button>↩</button>
 					</div>
 				)}
 			</div>
+			{backSide ?? ""}
+			{backSide && seeArrowButton && (
+				<div className="returnCard onCard" onClick={returnCard}>
+					<button>↩</button>
+				</div>
+			)}
 		</div>
 	);
 }

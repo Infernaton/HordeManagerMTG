@@ -18,6 +18,7 @@
   color: var(--text-color);
   position: relative;
   min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -130,4 +131,21 @@
   background-image: linear-gradient(var(--color-a) .1em, transparent .1em),
     linear-gradient(90deg, var(--color-a) .1em, transparent .1em);
   background-size: 1.5em 1.5em;
+  padding: 0;
+  height: 100%;
+}
+
+
+#life-slot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  .life-container {
+    margin: 1em;
+    padding: 1em;
+    background-color: var(--background-gray-color);
+    border-radius: 15px;
+  }
 }

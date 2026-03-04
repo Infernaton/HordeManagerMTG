@@ -8,7 +8,7 @@ interface CardDisplay {
 	card_data: Card;
 }
 
-function CardList({ cardList }: { cardList: Card[] }) {
+function CardList({ cardList, color }: { cardList: Card[]; color?: string }) {
 	let uniqueCard: CardDisplay[] = [];
 	for (let i = 0; i < cardList.length; i++) {
 		const currentCardIndex = uniqueCard.findIndex((u) => u.id == cardList[i].id);
@@ -26,7 +26,12 @@ function CardList({ cardList }: { cardList: Card[] }) {
 		<div className="card-container col7">
 			{uniqueCard.length > 0 &&
 				uniqueCard.map((cardObj) => (
-					<CardDisplay key={cardObj.id} card={cardObj.card_data} occurence={cardObj.occurence} />
+					<CardDisplay
+						key={cardObj.id}
+						card={cardObj.card_data}
+						occurence={cardObj.occurence}
+						colorBack={color}
+					/>
 				))}
 		</div>
 	);

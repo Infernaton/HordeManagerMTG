@@ -1,66 +1,82 @@
 import "./components.css";
-import { useRef, useState } from "react";
+import { Component, ReactNode, useState } from "react";
 import { Card } from "../models/Card";
 
-function CardDisplay({
-	card,
-	occurence,
-	colorBack,
-	frontFaceVisible,
-	visibleArrow,
-}: {
+type CardDisplayProps = {
 	card: Card;
 	occurence: number;
 	colorBack?: string;
 	frontFaceVisible?: boolean;
 	visibleArrow?: boolean;
-}) {
-	const [isFrontFaceSide, setIsFrontFaceSide] = useState(true);
-	const [isFrontSide, setIsFrontSide] = useState(frontFaceVisible ?? true);
+};
 
-	const seeArrowButton = visibleArrow ?? true;
-
-	const changeSide = () => setIsFrontFaceSide(!isFrontFaceSide);
-	const returnCard = () => {
-		console.log("test", isFrontSide);
-		setIsFrontSide(!isFrontSide);
+type CardState = {
+	isFrontFaceSide: boolean;
+	isFrontSide: boolean;
+};
+export class CardDisplayComponent extends Component<CardDisplayProps> {
+	state: Readonly<CardState> = {
+		isFrontFaceSide: true,
+		isFrontSide: this.props.frontFaceVisible ?? true,
 	};
-	let backSide = null;
-	if (colorBack != undefined) {
-		const backgroundCover = { "--background-color": colorBack } as React.CSSProperties;
-		backSide = <div className="card-back-side" style={backgroundCover}></div>;
+
+	getUniqueID(index: number) {
+		return index + "-" + this.props.card.id;
 	}
 
-	return (
-		<div className={"card" + (isFrontSide ? "" : " rotate")}>
-			<div className={"card-content" + (isFrontFaceSide ? "" : "rotate")}>
-				<div className="front-card">
-					<img src={card.front_card.full_image.toString()} alt={card.front_card.name} />
+	changeSide() {
+		this.setState({ isFrontFaceSide: !this.state.isFrontFaceSide });
+	}
+
+	returnCard() {
+		console.log("test", this.state.isFrontSide);
+		this.setState({ isFrontSide: !this.state.isFrontSide });
+	}
+
+	render(): ReactNode {
+		const seeArrowButton = this.props.visibleArrow ?? true;
+
+		let backSide = null;
+		if (this.props.colorBack != undefined) {
+			const backgroundCover = { "--background-color": this.props.colorBack } as React.CSSProperties;
+			backSide = <div className="card-back-side" style={backgroundCover}></div>;
+		}
+
+		return (
+			<div className={"card" + (this.state.isFrontSide ? "" : " rotate")}>
+				<div className={"card-content" + (this.state.isFrontFaceSide ? "" : " rotate")}>
+					<div className="front-card">
+						<img
+							src={this.props.card.front_card.full_image.toString()}
+							alt={this.props.card.front_card.name}
+						/>
+					</div>
+					{this.props.card.back_card && (
+						<div className="back-card">
+							<img
+								src={this.props.card.back_card.full_image.toString()}
+								alt={this.props.card.back_card.name}
+							/>
+						</div>
+					)}
+					{this.props.occurence > 1 && (
+						<div className="onCard occurence">
+							<div>x {this.props.occurence}</div>
+						</div>
+					)}
+					{this.props.card.back_card && seeArrowButton && (
+						<div className="revertCard onCard" onClick={() => this.changeSide()}>
+							<button>↩</button>
+						</div>
+					)}
 				</div>
-				{card.back_card && (
-					<div className="back-card">
-						<img src={card.back_card.full_image.toString()} alt={card.back_card.name} />
-					</div>
-				)}
-				{occurence > 1 && (
-					<div className="onCard occurence">
-						<div>x {occurence}</div>
-					</div>
-				)}
-				{card.back_card && seeArrowButton && (
-					<div className="revertCard onCard" onClick={changeSide}>
+				{backSide ?? ""}
+				{backSide && seeArrowButton && (
+					<div className="returnCard onCard" onClick={() => this.returnCard()}>
 						<button>↩</button>
 					</div>
 				)}
 			</div>
-			{backSide ?? ""}
-			{backSide && seeArrowButton && (
-				<div className="returnCard onCard" onClick={returnCard}>
-					<button>↩</button>
-				</div>
-			)}
-		</div>
-	);
+		);
+	}
 }
-
-export default CardDisplay;

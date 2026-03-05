@@ -1,6 +1,7 @@
 import "./components.css";
 import { Component, ReactNode, useState } from "react";
 import { Card } from "../models/Card";
+import { ICardState } from "../middleware/IType";
 
 type CardDisplayProps = {
 	card: Card;
@@ -9,20 +10,11 @@ type CardDisplayProps = {
 	frontFaceVisible?: boolean;
 	visibleArrow?: boolean;
 };
-
-type CardState = {
-	isFrontFaceSide: boolean;
-	isFrontSide: boolean;
-};
 export class CardDisplayComponent extends Component<CardDisplayProps> {
-	state: Readonly<CardState> = {
+	state: Readonly<ICardState> = {
 		isFrontFaceSide: true,
 		isFrontSide: this.props.frontFaceVisible ?? true,
 	};
-
-	getUniqueID(index: number) {
-		return index + "-" + this.props.card.id;
-	}
 
 	changeSide() {
 		this.setState({ isFrontFaceSide: !this.state.isFrontFaceSide });

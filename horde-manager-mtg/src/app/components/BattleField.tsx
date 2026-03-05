@@ -1,41 +1,71 @@
 import { Deck } from "../models/Deck";
 import "./components.css";
-import { CardDisplayComponent } from "./CardShowcase";
-import { CardSlot, CardContainer } from "./CardContainer";
+import { CardsSlot, CardsContainer } from "./CardContainer";
+import { useRef } from "react";
+import { ICardData, ICardState } from "../middleware/IType";
 
 function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }) {
+	const deckPileRef = useRef<CardsSlot>(null);
+	const graveyardRef = useRef<CardsSlot>(null);
+	const exileRef = useRef<CardsSlot>(null);
+	const handRef = useRef<CardsSlot>(null);
+	const stackRef = useRef<CardsSlot>(null);
+	const battlefieldRef = useRef<CardsSlot>(null);
 	const Deck = deck.sections[0];
 
-	const cardsElement = Deck?.card_list.map(
-		(card, i) =>
-			new CardDisplayComponent({
-				card: card,
-				occurence: 1,
-				colorBack: Deck.color,
-				frontFaceVisible: false,
-				visibleArrow: false,
-			}),
-	);
+	const stateTemplate: ICardState = {
+		sleeveColor: deck.sections[0].color,
+		isFrontFaceSide: false,
+		isFrontSide: true,
+		visibleArrow: false,
+	};
 
-	// Set differents battlefield zone
-	const deckPile = new CardContainer({ id: "deck-pile-slot", placeholder: "Deck", children: cardsElement });
-	const graveyardPile = new CardContainer({ id: "graveyard-slot", placeholder: "Graveyard", children: [] });
-	const exilePile = new CardContainer({ id: "exile-slot", placeholder: "Exile", children: [] });
-	const handPile = new CardSlot({ id: "hand-slot", children: [] });
-	const stackPile = new CardSlot({ id: "stack-slot", children: [] });
-	const battlefield = new CardSlot({ id: "battlefield-slot", children: [] });
+	const CardDataList: ICardData[] = Deck.card_list.map((card) => {
+		const state = structuredClone(stateTemplate);
+		state.isFrontSide = false;
+		return {
+			card: card,
+			state,
+		};
+	});
 
 	return (
 		<div className="playfield">
-			{deckPile.render()}
+			<CardsContainer
+				onClick={() => deckPileRef.current?.moveChildrenTo(0, stackRef.current, structuredClone(stateTemplate))}
+				ref={deckPileRef}
+				id="deck-pile-slot"
+				placeholder="Deck"
+				card_list={CardDataList}
+			/>
 
-			{graveyardPile.render()}
+			<CardsContainer ref={graveyardRef} id="graveyard-slot" placeholder="Graveyard" card_list={[]} />
 
-			{exilePile.render()}
+			<CardsContainer ref={exileRef} id="exile-slot" placeholder="Exile" card_list={[]} />
 
-			{handPile.render()}
-			{stackPile.render()}
-			{battlefield.render()}
+			<CardsSlot ref={handRef} id="hand-slot" card_list={[]} />
+			<CardsSlot
+				ref={stackRef}
+				id="stack-slot"
+				card_list={[]}
+				onClick={() => {
+					const state = structuredClone(stateTemplate);
+					state.visibleArrow = true;
+					stackRef.current?.moveChildrenTo(
+						stackRef.current.state.currentCardList.length - 1,
+						battlefieldRef.current,
+						state,
+					);
+				}}
+			/>
+			<CardsSlot
+				ref={battlefieldRef}
+				id="battlefield-slot"
+				card_list={[]}
+				onCardClick={(index) =>
+					battlefieldRef.current?.moveChildrenTo(index, graveyardRef.current, structuredClone(stateTemplate))
+				}
+			/>
 		</div>
 	);
 }

@@ -29,6 +29,24 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 		};
 	});
 
+	const moveFromStack = () => {
+		if (stackRef.current == null) return;
+		const state = structuredClone(stateTemplate);
+		state.visibleArrow = true;
+
+		const index: number = stackRef.current.state.currentCardList.length - 1;
+		const currentCard = stackRef.current.state.currentCardList[index];
+
+		// If a sorcery or instant card is the top card of the stack,
+		// it goes in the graveyard upon resolution
+		const destination: CardsSlot | null =
+			currentCard.card.front_card.type_line.includes("Sorcery") ||
+			currentCard.card.front_card.type_line.includes("Instant")
+				? graveyardRef.current
+				: battlefieldRef.current;
+		stackRef.current?.moveChildrenTo(index, destination, state);
+	};
+
 	return (
 		<div className="playfield">
 			<div></div>
@@ -45,20 +63,7 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 			<CardsContainer ref={graveyardRef} id="graveyard-slot" placeholder="Graveyard" card_list={[]} />
 
 			<CardsSlot ref={handRef} id="hand-slot" card_list={[]} />
-			<CardsSlot
-				ref={stackRef}
-				id="stack-slot"
-				card_list={[]}
-				onClick={() => {
-					const state = structuredClone(stateTemplate);
-					state.visibleArrow = true;
-					stackRef.current?.moveChildrenTo(
-						stackRef.current.state.currentCardList.length - 1,
-						battlefieldRef.current,
-						state,
-					);
-				}}
-			/>
+			<CardsSlot ref={stackRef} id="stack-slot" card_list={[]} onClick={moveFromStack} />
 			<CardsSlot
 				ref={battlefieldRef}
 				id="battlefield-slot"

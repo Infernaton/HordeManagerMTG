@@ -39,8 +39,9 @@ export class CardsSlot extends Component<CardContainerProps> {
 	}
 
 	renderCard(cardData: ICardData, index: number) {
+		const id = this.props.id + "-" + cardData.card.id + "-" + index;
 		return (
-			<div className="card-holder" key={index} onClick={() => this.props.onCardClick?.(index)}>
+			<div className="card-holder" id={id} key={id} onClick={() => this.props.onCardClick?.(index)}>
 				<CardDisplayComponent
 					card={cardData.card}
 					occurence={1}

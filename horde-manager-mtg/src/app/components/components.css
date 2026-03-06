@@ -207,12 +207,12 @@
         .dragging {
             opacity: 0.7;
             z-index: 2;
+            transform: rotate(-2deg);
 
             .card {
                 scale: unset;
             }
 
-            /* transform: rotate(-2deg); */
         }
     }
 
@@ -239,15 +239,23 @@
         top: 50%;
         left: 0;
         transform: translateY(-50%);
-        z-index: 3;
+
+        &:has(.card) {
+            z-index: 3;
+        }
 
         .container {
             width: 15em;
+            aspect-ratio: 7 / 10;
         }
 
         .card-holder {
             --pos: calc(sibling-index() - 2);
             left: calc(var(--pos) * 20px);
+
+            img {
+                box-shadow: 0px 0px 10px 0px #000;
+            }
         }
     }
 

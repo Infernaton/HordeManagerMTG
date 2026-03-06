@@ -1,7 +1,7 @@
 import { Deck } from "../models/Deck";
 import "./components.css";
 import { CardsSlot, CardsContainer } from "./CardContainer";
-import { useRef } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 import { ICardData, ICardState } from "../middleware/IType";
 
 function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }) {
@@ -31,17 +31,18 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 
 	return (
 		<div className="playfield">
+			<div></div>
 			<CardsContainer
-				onClick={() => deckPileRef.current?.moveChildrenTo(0, stackRef.current, structuredClone(stateTemplate))}
 				ref={deckPileRef}
 				id="deck-pile-slot"
 				placeholder="Deck"
 				card_list={CardDataList}
+				onClick={() => deckPileRef.current?.moveChildrenTo(0, stackRef.current, structuredClone(stateTemplate))}
 			/>
 
-			<CardsContainer ref={graveyardRef} id="graveyard-slot" placeholder="Graveyard" card_list={[]} />
-
 			<CardsContainer ref={exileRef} id="exile-slot" placeholder="Exile" card_list={[]} />
+
+			<CardsContainer ref={graveyardRef} id="graveyard-slot" placeholder="Graveyard" card_list={[]} />
 
 			<CardsSlot ref={handRef} id="hand-slot" card_list={[]} />
 			<CardsSlot
@@ -62,9 +63,10 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 				ref={battlefieldRef}
 				id="battlefield-slot"
 				card_list={[]}
-				onCardClick={(index) =>
-					battlefieldRef.current?.moveChildrenTo(index, graveyardRef.current, structuredClone(stateTemplate))
-				}
+				grabbable={true}
+				// onCardClick={(index) =>
+				// 	battlefieldRef.current?.moveChildrenTo(index, graveyardRef.current, structuredClone(stateTemplate))
+				// }
 			/>
 		</div>
 	);

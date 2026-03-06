@@ -80,6 +80,7 @@
         cursor: pointer;
         /* virtually increase size of the button */
         padding: 0.5em;
+        user-select: none;
 
         &>* {
             padding: 4px 8px;
@@ -120,6 +121,8 @@
     img {
         width: 100%;
         border-radius: var(--img-border-radius);
+        pointer-events: none;
+        user-select: none;
     }
 }
 
@@ -137,6 +140,7 @@
     position: relative;
     width: 100%;
     height: 100%;
+    user-select: none;
 
     #stack-slot,
     #deck-pile-slot,
@@ -151,6 +155,7 @@
         margin: 1em;
         padding: 1em;
         position: relative;
+        height: stretch;
 
         &.bg {
             background-color: var(--background-gray-color);
@@ -180,7 +185,7 @@
         .card-holder {
             position: absolute;
             width: 100%;
-            height: 100%;
+            height: min-content;
         }
     }
 
@@ -193,25 +198,41 @@
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: 1;
+
+        .card-holder {
+            cursor: grab;
+            max-width: 10em;
+        }
+
+        .dragging {
+            opacity: 0.7;
+            z-index: 2;
+
+            .card {
+                scale: unset;
+            }
+
+            /* transform: rotate(-2deg); */
+        }
     }
 
     #deck-pile-slot {
         top: 10%;
         right: 0;
-        z-index: 2;
+
+        .container {
+            z-index: 15;
+        }
     }
 
     #graveyard-slot {
         bottom: 0%;
         right: 1%;
-        z-index: 3;
     }
 
     #exile-slot {
         bottom: 10%;
         right: 0;
-        z-index: 2;
     }
 
     #stack-slot {

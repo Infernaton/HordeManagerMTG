@@ -12,3 +12,11 @@ export function useData<T>(callback: (...args: any[]) => Promise<T>, ...args: an
 	}, [callback]);
 	return data;
 }
+
+export function isBetween(from: number, to: number, compare: number) {
+	return compare >= from && compare <= to;
+}
+
+export function stayRange(from: number, to: number, value: number) {
+	return Math.min(Math.max(from, value), to);
+}

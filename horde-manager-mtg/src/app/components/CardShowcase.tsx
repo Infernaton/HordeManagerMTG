@@ -21,7 +21,6 @@ export class CardDisplayComponent extends Component<CardDisplayProps> {
 	}
 
 	returnCard() {
-		console.log("test", this.state.isFrontSide);
 		this.setState({ isFrontSide: !this.state.isFrontSide });
 	}
 

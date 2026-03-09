@@ -1,5 +1,4 @@
 import { Component, ReactNode } from "react";
-import { Card } from "../models/Card";
 import { CardDisplayComponent } from "./CardShowcase";
 import { ICardData, ICardState } from "../middleware/IType";
 

@@ -4,7 +4,6 @@ import { CardsSlot, CardsContainer } from "./CardContainer";
 import { useEffect, useRef } from "react";
 import { ICardData, ICardState } from "../middleware/IType";
 import { calculateCoord, canDragCard, moveToNewSlot } from "../middleware/battlefieldHelper";
-import { isParent, toNumber } from "../middleware/handler";
 
 function setupGrabEvent(allowGrabZone: React.RefObject<CardsSlot>[], dropZone: React.RefObject<CardsSlot>[]): void {
 	let dragging: HTMLElement | null = null;

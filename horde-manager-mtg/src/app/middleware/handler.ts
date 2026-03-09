@@ -13,10 +13,31 @@ export function useData<T>(callback: (...args: any[]) => Promise<T>, ...args: an
 	return data;
 }
 
-export function isBetween(from: number, to: number, compare: number) {
-	return compare >= from && compare <= to;
+export function toNumber(string: string) {
+	return Number(string);
 }
 
 export function stayRange(from: number, to: number, value: number) {
 	return Math.min(Math.max(from, value), to);
+}
+
+export function isOverlapping(a: HTMLElement, b: HTMLElement) {
+	const aBound = a.getBoundingClientRect();
+	const bBound = b.getBoundingClientRect();
+
+	return !(
+		aBound.right < bBound.left ||
+		aBound.left > bBound.right ||
+		aBound.bottom < bBound.top ||
+		aBound.top > bBound.bottom
+	);
+}
+
+export function isParent(child: HTMLElement, parent: HTMLElement) {
+	const childParent = child.parentElement;
+	console.log(childParent);
+
+	if (childParent && childParent == parent) return true;
+	else if (!childParent || childParent == document.getRootNode()) return false;
+	else return isParent(childParent, parent);
 }

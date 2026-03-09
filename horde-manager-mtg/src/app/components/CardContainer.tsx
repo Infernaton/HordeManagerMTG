@@ -2,13 +2,11 @@ import { Component, ReactNode } from "react";
 import { Card } from "../models/Card";
 import { CardDisplayComponent } from "./CardShowcase";
 import { ICardData, ICardState } from "../middleware/IType";
-import { isBetween, stayRange } from "../middleware/handler";
 
 type CardContainerProps = {
 	id: string;
 	placeholder?: string;
 	card_list: ICardData[];
-	grabbable?: boolean;
 	onClick?: () => void;
 	onLongClick?: () => void;
 	onCardClick?: (cardIndex: number) => void;
@@ -39,7 +37,7 @@ export class CardsSlot extends Component<CardContainerProps> {
 	}
 
 	renderCard(cardData: ICardData, index: number) {
-		const id = this.props.id + "-" + cardData.card.id + "-" + index;
+		const id = this.props.id + "_" + cardData.card.id + "_" + index;
 		return (
 			<div className="card-holder" id={id} key={id} onClick={() => this.props.onCardClick?.(index)}>
 				<CardDisplayComponent
@@ -51,63 +49,6 @@ export class CardsSlot extends Component<CardContainerProps> {
 				/>
 			</div>
 		);
-	}
-
-	componentDidMount(): void {
-		if (!this.props.grabbable) return;
-
-		const container = document.querySelector<HTMLElement>(`#${this.props.id} .card-list`);
-		if (!container) return;
-
-		let dragging: HTMLElement | null = null;
-
-		const initDrag = (e: Event) => {
-			const clickedTarget = e.target as HTMLElement;
-			if (clickedTarget.classList.contains("onCard")) return;
-			const target = clickedTarget?.closest(".card-holder") as HTMLElement;
-			if (target && target.classList.contains("card-holder")) {
-				dragging = target;
-				target.classList.add("dragging");
-			}
-		};
-		container.addEventListener("mousedown", initDrag);
-		container.addEventListener("touchstart", initDrag);
-
-		const drag = (startingCoord: [x: number, y: number]) => {
-			if (!dragging) return;
-			const maxCoordinates = [
-				container.offsetWidth - dragging.offsetWidth,
-				container.offsetHeight - dragging.offsetHeight,
-			];
-			const newCoordinates = [
-				stayRange(0, maxCoordinates[0], startingCoord[0] - container.offsetLeft - dragging.offsetWidth / 2),
-				stayRange(0, maxCoordinates[1], startingCoord[1] - container.offsetTop - dragging.offsetHeight / 2),
-			];
-			dragging.style.left = `${newCoordinates[0]}px`;
-			dragging.style.top = `${newCoordinates[1]}px`;
-		};
-		document.addEventListener("mousemove", (ev: MouseEvent) => drag([ev.pageX, ev.pageY]));
-		document.addEventListener(
-			"touchmove",
-			(ev: TouchEvent) => {
-				ev.preventDefault();
-				drag([ev.touches[0].pageX, ev.touches[0].pageY]);
-			},
-			{ passive: dragging !== null },
-		);
-
-		const endDrag = () => {
-			if (dragging) {
-				dragging.classList.remove("dragging");
-			}
-			dragging = null;
-		};
-		document.addEventListener("mouseup", endDrag);
-		document.addEventListener("touchend", endDrag);
-
-		// container.addEventListener("dragover", (e: DragEvent) => {
-		// 	e.preventDefault();
-		// });
 	}
 
 	render(): ReactNode {

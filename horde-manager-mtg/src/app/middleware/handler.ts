@@ -41,3 +41,10 @@ export function isParent(child: HTMLElement, parent: HTMLElement) {
 	else if (!childParent || childParent == document.getRootNode()) return false;
 	else return isParent(childParent, parent);
 }
+
+export function shuffle(array: any[]) {
+	return array
+		.map((value) => ({ value, sort: Math.random() }))
+		.sort((a, b) => a.sort - b.sort)
+		.map(({ value }) => value);
+}

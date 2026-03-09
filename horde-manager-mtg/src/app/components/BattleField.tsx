@@ -4,6 +4,7 @@ import { CardsSlot, CardsContainer } from "./CardContainer";
 import { useEffect, useRef } from "react";
 import { ICardData, ICardState } from "../middleware/IType";
 import { calculateCoord, canDragCard, moveToNewSlot } from "../middleware/battlefieldHelper";
+import { shuffle } from "../middleware/handler";
 
 function setupGrabEvent(allowGrabZone: React.RefObject<CardsSlot>[], dropZone: React.RefObject<CardsSlot>[]): void {
 	let dragging: HTMLElement | null = null;
@@ -83,7 +84,7 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 		visibleArrow: false,
 	};
 
-	const CardDataList: ICardData[] = Deck.card_list.map((card) => {
+	const CardDataList: ICardData[] = shuffle(Deck.card_list).map((card) => {
 		const state = structuredClone(stateTemplate);
 		state.isFrontSide = false;
 		return {

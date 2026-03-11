@@ -35,7 +35,6 @@ export function isOverlapping(a: HTMLElement, b: HTMLElement) {
 
 export function isParent(child: HTMLElement, parent: HTMLElement) {
 	const childParent = child.parentElement;
-	console.log(childParent);
 
 	if (childParent && childParent == parent) return true;
 	else if (!childParent || childParent == document.getRootNode()) return false;

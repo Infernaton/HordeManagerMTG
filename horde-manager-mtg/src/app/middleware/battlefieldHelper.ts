@@ -43,9 +43,7 @@ export function moveToNewSlot(
 	const originSlot = possibleOriginParent.find((zone) => {
 		const container = document.getElementById(zone.current.props.id);
 		if (!container) return;
-		// console.log(container, isParent(dragged, container));
 		return isParent(dragged, container);
 	});
-	// console.log(originSlot, index, nextDropSlot);
 	originSlot?.current.moveChildrenTo(index, nextDropSlot);
 }

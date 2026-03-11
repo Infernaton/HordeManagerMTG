@@ -4,12 +4,18 @@ import { CardsSlot, CardsContainer } from "./CardContainer";
 import { useEffect, useRef } from "react";
 import { ICardData, ICardState } from "../middleware/IType";
 import { calculateCoord, canDragCard, moveToNewSlot } from "../middleware/battlefieldHelper";
-import { shuffle } from "../middleware/handler";
+import { isParent, shuffle } from "../middleware/handler";
 
-function setupGrabEvent(allowGrabZone: React.RefObject<CardsSlot>[], dropZone: React.RefObject<CardsSlot>[]): void {
+function setupEvent(allowGrabZone: React.RefObject<CardsSlot>[], dropZone: React.RefObject<CardsSlot>[]): void {
 	let dragging: HTMLElement | null = null;
 	let currentContainer = (): HTMLElement | null | undefined => dragging?.closest(".card-list");
 	let nextDropSlot: CardsSlot | null = null;
+
+	const setOverlapped = (slot: CardsSlot, isOverlapped: boolean) => {
+		slot.overlapped(isOverlapped);
+		if (isOverlapped) nextDropSlot = slot;
+		else if (nextDropSlot == slot) nextDropSlot = null;
+	};
 
 	document.addEventListener("pointerdown", (e: PointerEvent) => {
 		const target = canDragCard(e.target as HTMLElement, allowGrabZone.map((el) => el.current.props.id) as string[]);
@@ -17,6 +23,9 @@ function setupGrabEvent(allowGrabZone: React.RefObject<CardsSlot>[], dropZone: R
 
 		dragging = target;
 		target.classList.add("dragging");
+		// IMPORTANT
+		// On mobile, if not present, prevent event "pointerenter" and "pointerleave" to fire on other element
+		(e.target as HTMLElement).releasePointerCapture(e.pointerId);
 	});
 
 	document.addEventListener("pointermove", (ev: PointerEvent) => {
@@ -32,22 +41,23 @@ function setupGrabEvent(allowGrabZone: React.RefObject<CardsSlot>[], dropZone: R
 		const dropContainer = document.querySelector<HTMLElement>(`#${el.current.props.id} .container`);
 		if (!dropContainer) return;
 
-		dropContainer.addEventListener("pointerenter", (e: PointerEvent) => {
+		dropContainer.addEventListener("pointerenter", () => {
 			if (!dragging) return;
-			dropContainer.classList.add("overlapping");
-			nextDropSlot = el.current;
+			if (isParent(dragging, dropContainer)) return;
+
+			setOverlapped(el.current, true);
 		});
-		dropContainer.addEventListener("pointerleave", () => {
-			dropContainer.classList.remove("overlapping");
-			if (nextDropSlot == el.current) nextDropSlot = null;
-		});
+		dropContainer.addEventListener("pointerleave", () => setOverlapped(el.current, false));
 	});
 
 	document.addEventListener("pointerup", () => {
 		if (dragging) {
 			dragging.classList.remove("dragging");
 
-			if (nextDropSlot) moveToNewSlot(dragging, allowGrabZone, nextDropSlot);
+			if (nextDropSlot) {
+				moveToNewSlot(dragging, allowGrabZone, nextDropSlot);
+				setOverlapped(nextDropSlot, false);
+			}
 		}
 
 		dragging = null;
@@ -63,8 +73,8 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 	const battlefieldRef = useRef<CardsSlot>(null);
 	const Deck = deck.sections[0];
 
-	const allowGrabZone = [battlefieldRef];
-	const dropZone = [exileRef, graveyardRef];
+	const allowGrabZone = [battlefieldRef, graveyardRef, exileRef];
+	const dropZone = [battlefieldRef, exileRef, graveyardRef];
 
 	useEffect(() => {
 		if (
@@ -74,7 +84,7 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 				.includes(null)
 		)
 			return;
-		setupGrabEvent(allowGrabZone as React.RefObject<CardsSlot>[], dropZone as React.RefObject<CardsSlot>[]);
+		setupEvent(allowGrabZone as React.RefObject<CardsSlot>[], dropZone as React.RefObject<CardsSlot>[]);
 	}, allowGrabZone.concat(dropZone));
 
 	const stateTemplate: ICardState = {
@@ -98,6 +108,8 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 		const state = structuredClone(stateTemplate);
 		state.visibleArrow = true;
 
+		if (stackRef.current.state.currentCardList.length < 1) return;
+
 		const index: number = stackRef.current.state.currentCardList.length - 1;
 		const currentCard = stackRef.current.state.currentCardList[index];
 
@@ -113,7 +125,6 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 
 	return (
 		<div className="playfield">
-			<div></div>
 			<CardsSlot ref={battlefieldRef} id="battlefield-slot" card_list={[]} />
 
 			<CardsContainer

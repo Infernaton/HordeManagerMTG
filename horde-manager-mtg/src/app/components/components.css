@@ -142,6 +142,7 @@
     width: 100%;
     height: 100%;
     user-select: none;
+    touch-action: none;
 
     #stack-slot,
     #deck-pile-slot,
@@ -171,6 +172,10 @@
 
         &.overlapping {
             box-shadow: inset 0 0 10px 0px #eee, 0 0 10px 0px #eee;
+        }
+
+        &:has(.dragging) {
+            pointer-events: none;
         }
 
         .placeholder {
@@ -217,7 +222,6 @@
             .card {
                 scale: unset;
             }
-
         }
     }
 

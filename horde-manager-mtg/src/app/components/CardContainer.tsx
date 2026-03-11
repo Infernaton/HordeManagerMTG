@@ -14,8 +14,13 @@ type CardContainerProps = {
 
 export class CardsSlot extends Component<CardContainerProps> {
 	state = {
+		overlapped: false,
 		currentCardList: this.props.card_list,
 	};
+
+	overlapped(isOverlapped: boolean) {
+		this.setState({ overlapped: isOverlapped });
+	}
 
 	addChildren(...newChild: ICardData[]) {
 		this.setState({ currentCardList: [...this.state.currentCardList, ...newChild] });
@@ -53,7 +58,7 @@ export class CardsSlot extends Component<CardContainerProps> {
 	render(): ReactNode {
 		return (
 			<div id={this.props.id} onClick={this.props.onClick}>
-				<div className="container">
+				<div className={"container" + (this.state.overlapped ? " overlapping" : "")}>
 					<div className="card-list">
 						{this.state.currentCardList.map((card, index) => this.renderCard(card, index))}
 					</div>
@@ -67,7 +72,7 @@ export class CardsContainer extends CardsSlot {
 	render(): ReactNode {
 		return (
 			<div id={this.props.id} onClick={this.props.onClick}>
-				<div className="card-slot bg container">
+				<div className={"card-slot bg container" + (this.state.overlapped ? " overlapping" : "")}>
 					<div className="placeholder">{this.props.placeholder}</div>
 					<div className="card-list">
 						{this.state.currentCardList.map((card, index) => this.renderCard(card, index))}

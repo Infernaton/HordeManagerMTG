@@ -277,3 +277,30 @@
 }
 
 /* #endregion */
+
+/* #region context-menu */
+
+.context-menu {
+    position: absolute;
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    min-width: max-content;
+    border-radius: 4px;
+    box-shadow: 2px 2px 6px rgb(209, 209, 209);
+    z-index: 4;
+
+    &>li {
+        cursor: pointer;
+        list-style-type: none;
+        padding: 5px;
+        font-size: 12pt;
+        text-align: left;
+
+        &:hover {
+            background-color: gray;
+        }
+    }
+}
+
+/* #endregion

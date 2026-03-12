@@ -1,15 +1,14 @@
 import { Component, ReactNode } from "react";
 import { CardDisplayComponent } from "./CardShowcase";
 import { ICardData, ICardState } from "../middleware/IType";
+import ContextMenu, { ContextMenuItem } from "./ContextMenu";
 
 type CardContainerProps = {
 	id: string;
 	placeholder?: string;
 	card_list: ICardData[];
+	cardContextMenu?: ContextMenuItem[];
 	onClick?: () => void;
-	onLongClick?: () => void;
-	onCardClick?: (cardIndex: number) => void;
-	onCardLongClick?: (cardIndex: number) => void;
 };
 
 export class CardsSlot extends Component<CardContainerProps> {
@@ -42,8 +41,9 @@ export class CardsSlot extends Component<CardContainerProps> {
 
 	renderCard(cardData: ICardData, index: number) {
 		const id = this.props.id + "_" + cardData.card.id + "_" + index;
-		return (
-			<div className="card-holder" id={id} key={id} onClick={() => this.props.onCardClick?.(index)}>
+
+		const card = (
+			<div className="card-holder" id={id} key={id}>
 				<CardDisplayComponent
 					card={cardData.card}
 					occurence={1}
@@ -52,6 +52,21 @@ export class CardsSlot extends Component<CardContainerProps> {
 					visibleArrow={cardData.state.visibleArrow}
 				/>
 			</div>
+		);
+
+		return (
+			<>
+				{this.props.cardContextMenu ? (
+					<ContextMenu
+						id={"context-menu-" + this.props.id}
+						cardIndex={index}
+						items={this.props.cardContextMenu}>
+						{card}
+					</ContextMenu>
+				) : (
+					card
+				)}
+			</>
 		);
 	}
 

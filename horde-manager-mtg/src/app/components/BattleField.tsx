@@ -125,7 +125,28 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 
 	return (
 		<div className="playfield">
-			<CardsSlot ref={battlefieldRef} id="battlefield-slot" card_list={[]} />
+			<CardsSlot
+				ref={battlefieldRef}
+				id="battlefield-slot"
+				card_list={[]}
+				cardContextMenu={[
+					{
+						id: "to-graveyard",
+						caption: "Move to Graveyard",
+						onClick: (cardIndex) => {
+							battlefieldRef.current?.moveChildrenTo(cardIndex, graveyardRef.current);
+							// console.log("test caption click");
+						},
+					},
+					{
+						id: "to-exile",
+						caption: "Move to Exile",
+						onClick: (cardIndex) => {
+							battlefieldRef.current?.moveChildrenTo(cardIndex, exileRef.current);
+						},
+					},
+				]}
+			/>
 
 			<CardsContainer
 				ref={deckPileRef}

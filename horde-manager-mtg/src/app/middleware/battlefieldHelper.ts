@@ -1,9 +1,34 @@
-import { CardsSlot } from "../components/CardContainer";
-import { isParent, stayRange, toNumber } from "./handler";
+import { Card } from "../models/Card";
+import { shuffle, stayRange, toNumber } from "./handler";
+import { ICardData, ICardState, Zone } from "./IType";
+
+export function newFullDeck(cardList: Card[], sleeveColor: string) {
+	return shuffle(cardList).map((card, index) => {
+		const state: ICardState = {
+			id: card.id + "_" + index,
+			sleeveColor: sleeveColor, // deck.sections[0].color,
+			isFrontFaceSide: false,
+			isFrontSide: false,
+			visibleArrow: false,
+			zone: Zone.Deck,
+		};
+		return {
+			card: card,
+			state,
+		};
+	});
+}
+
+export function getGlobalCardIndex(card: ICardData) {
+	return toNumber(card.state.id!.slice(card.state.id!.indexOf("_") + 1));
+}
 
 export function canDragCard(clickedTarget: HTMLElement, allowID: string[]) {
 	// do not init the drag if user clicked on a element on the card (like a button)
 	if (clickedTarget.classList.contains("onCard")) return;
+
+	// if the context menu is clicked, prevent drag
+	if (clickedTarget.closest(".context-menu")) return;
 
 	// get the parent element, to drag the whole card and no just an image
 	const target = clickedTarget?.closest(".card-holder") as HTMLElement;
@@ -28,22 +53,4 @@ export function calculateCoord(
 		stayRange(0, maxCoordinates[0], startingCoord[0] - container.offsetLeft - dragged.offsetWidth / 2),
 		stayRange(0, maxCoordinates[1], startingCoord[1] - container.offsetTop - dragged.offsetHeight / 2),
 	];
-}
-
-export function moveToNewSlot(
-	dragged: HTMLElement,
-	possibleOriginParent: React.RefObject<CardsSlot>[],
-	nextDropSlot: CardsSlot,
-) {
-	// get index of the card in the container internal list
-	const splitId = dragged.id.split("_");
-	const index = toNumber(splitId[splitId.length - 1]);
-
-	// get container as CardsSlot object
-	const originSlot = possibleOriginParent.find((zone) => {
-		const container = document.getElementById(zone.current.props.id);
-		if (!container) return;
-		return isParent(dragged, container);
-	});
-	originSlot?.current.moveChildrenTo(index, nextDropSlot);
 }

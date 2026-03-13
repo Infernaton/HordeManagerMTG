@@ -1,140 +1,150 @@
 import { Deck } from "../models/Deck";
 import "./components.css";
-import { CardsSlot, CardsContainer } from "./CardContainer";
-import { useEffect, useRef } from "react";
-import { ICardData, ICardState } from "../middleware/IType";
-import { calculateCoord, canDragCard, moveToNewSlot } from "../middleware/battlefieldHelper";
-import { isParent, shuffle } from "../middleware/handler";
-
-function setupEvent(allowGrabZone: React.RefObject<CardsSlot>[], dropZone: React.RefObject<CardsSlot>[]): void {
-	let dragging: HTMLElement | null = null;
-	let currentContainer = (): HTMLElement | null | undefined => dragging?.closest(".card-list");
-	let nextDropSlot: CardsSlot | null = null;
-
-	const setOverlapped = (slot: CardsSlot, isOverlapped: boolean) => {
-		slot.overlapped(isOverlapped);
-		if (isOverlapped) nextDropSlot = slot;
-		else if (nextDropSlot == slot) nextDropSlot = null;
-	};
-
-	document.addEventListener("pointerdown", (e: PointerEvent) => {
-		const target = canDragCard(e.target as HTMLElement, allowGrabZone.map((el) => el.current.props.id) as string[]);
-		if (!target) return;
-
-		dragging = target;
-		target.classList.add("dragging");
-		// IMPORTANT
-		// On mobile, if not present, prevent event "pointerenter" and "pointerleave" to fire on other element
-		(e.target as HTMLElement).releasePointerCapture(e.pointerId);
-	});
-
-	document.addEventListener("pointermove", (ev: PointerEvent) => {
-		if (!dragging) return;
-		const newCoordinates = calculateCoord(currentContainer(), dragging, [ev.pageX, ev.pageY]);
-		if (!newCoordinates) return;
-
-		dragging.style.left = `${newCoordinates[0]}px`;
-		dragging.style.top = `${newCoordinates[1]}px`;
-	});
-
-	dropZone.forEach((el) => {
-		const dropContainer = document.querySelector<HTMLElement>(`#${el.current.props.id} .container`);
-		if (!dropContainer) return;
-
-		dropContainer.addEventListener("pointerenter", () => {
-			if (!dragging) return;
-			if (isParent(dragging, dropContainer)) return;
-
-			setOverlapped(el.current, true);
-		});
-		dropContainer.addEventListener("pointerleave", () => setOverlapped(el.current, false));
-	});
-
-	document.addEventListener("pointerup", () => {
-		if (dragging) {
-			dragging.classList.remove("dragging");
-
-			if (nextDropSlot) {
-				moveToNewSlot(dragging, allowGrabZone, nextDropSlot);
-				setOverlapped(nextDropSlot, false);
-			}
-		}
-
-		dragging = null;
-	});
-}
+import { FnCardsSlot } from "./CardContainer";
+import { useEffect, useRef, useState } from "react";
+import { ICardData, ICardState, Zone } from "../middleware/IType";
+import { calculateCoord, canDragCard, getGlobalCardIndex, newFullDeck } from "../middleware/battlefieldHelper";
+import { isParent, shuffle, toNumber } from "../middleware/handler";
 
 function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }) {
-	const deckPileRef = useRef<CardsSlot>(null);
-	const graveyardRef = useRef<CardsSlot>(null);
-	const exileRef = useRef<CardsSlot>(null);
-	const handRef = useRef<CardsSlot>(null);
-	const stackRef = useRef<CardsSlot>(null);
-	const battlefieldRef = useRef<CardsSlot>(null);
 	const Deck = deck.sections[0];
+	const [cardDataList, setCardDataList] = useState<ICardData[]>(newFullDeck(Deck.card_list, Deck.color));
 
-	const allowGrabZone = [battlefieldRef, graveyardRef, exileRef];
-	const dropZone = [battlefieldRef, exileRef, graveyardRef];
+	const ZoneRef: Map<Zone, React.RefObject<HTMLDivElement | null>> = new Map();
+	ZoneRef.set(Zone.Deck, useRef<HTMLDivElement>(null));
+	ZoneRef.set(Zone.Graveyard, useRef<HTMLDivElement>(null));
+	ZoneRef.set(Zone.Exile, useRef<HTMLDivElement>(null));
+	ZoneRef.set(Zone.Hand, useRef<HTMLDivElement>(null));
+	ZoneRef.set(Zone.Stack, useRef<HTMLDivElement>(null));
+	ZoneRef.set(Zone.Battlefield, useRef<HTMLDivElement>(null));
 
-	useEffect(() => {
-		if (
-			allowGrabZone
-				.concat(dropZone)
-				.map((ref) => ref.current)
-				.includes(null)
-		)
-			return;
-		setupEvent(allowGrabZone as React.RefObject<CardsSlot>[], dropZone as React.RefObject<CardsSlot>[]);
-	}, allowGrabZone.concat(dropZone));
+	const allowGrabZone = [Zone.Battlefield, Zone.Graveyard, Zone.Exile];
+	const dropZone = [Zone.Battlefield, Zone.Graveyard, Zone.Exile];
 
-	const stateTemplate: ICardState = {
-		sleeveColor: deck.sections[0].color,
-		isFrontFaceSide: false,
-		isFrontSide: true,
-		visibleArrow: false,
+	const setupEvent = (
+		zoneRef: Map<Zone, React.RefObject<HTMLDivElement | null>>,
+		allowGrabZone: Zone[],
+		dropZone: Zone[],
+	): void => {
+		let dragging: HTMLElement | null = null;
+		let currentContainer = (): HTMLElement | null | undefined => dragging?.closest(".card-list");
+		let nextDropSlot: Zone | null = null;
+
+		const setOverlapped = (slot: Zone, isOverlapped: boolean) => {
+			// slot.overlapped(isOverlapped);
+			if (isOverlapped) nextDropSlot = slot;
+			else if (nextDropSlot == slot) nextDropSlot = null;
+		};
+
+		document.addEventListener("pointerdown", (e: PointerEvent) => {
+			const target = canDragCard(
+				e.target as HTMLElement,
+				allowGrabZone.map((el) => ZoneRef.get(el)!.current!.id),
+			);
+			// prevent drag if a other click than e.button == 0 (left click) was pressed
+			if (!target || e.button != 0) return;
+
+			dragging = target;
+			target.classList.add("dragging");
+			// IMPORTANT
+			// On mobile, if not present, prevent event "pointerenter" and "pointerleave" to fire on other element
+			(e.target as HTMLElement).releasePointerCapture(e.pointerId);
+		});
+
+		document.addEventListener("pointermove", (ev: PointerEvent) => {
+			if (!dragging) return;
+			const newCoordinates = calculateCoord(currentContainer(), dragging, [ev.pageX, ev.pageY]);
+			if (!newCoordinates) return;
+
+			dragging.style.left = `${newCoordinates[0]}px`;
+			dragging.style.top = `${newCoordinates[1]}px`;
+		});
+
+		dropZone.forEach((el) => {
+			const dropContainer = document.querySelector<HTMLElement>(`#${zoneRef.get(el)!.current?.id} .container`);
+			if (!dropContainer) return;
+
+			dropContainer.addEventListener("pointerenter", () => {
+				if (!dragging) return;
+				if (isParent(dragging, dropContainer)) return;
+
+				setOverlapped(el, true);
+			});
+			dropContainer.addEventListener("pointerleave", () => setOverlapped(el, false));
+		});
+
+		document.addEventListener("pointerup", () => {
+			if (dragging) {
+				dragging.classList.remove("dragging");
+
+				if (nextDropSlot) {
+					// moveToNewSlot(dragging, allowGrabZone, nextDropSlot);
+					// // get index of the card in the container internal list
+					// const index = Array.prototype.indexOf.call(dragging.parentElement?.children, dragging);
+
+					// // get container as CardsSlot object
+					// const originSlot = possibleOriginParent.find((zone) => {
+					// 	const container = document.getElementById(zone.current.props.id);
+					// 	if (!container) return;
+					// 	return isParent(dragged, container);
+					// });
+					// originSlot?.current.moveChildrenTo(index, nextDropSlot);
+					setOverlapped(nextDropSlot, false);
+				}
+			}
+
+			dragging = null;
+		});
 	};
 
-	const CardDataList: ICardData[] = shuffle(Deck.card_list).map((card) => {
-		const state = structuredClone(stateTemplate);
-		state.isFrontSide = false;
-		return {
-			card: card,
-			state,
-		};
-	});
+	useEffect(() => {
+		setupEvent(ZoneRef, allowGrabZone, dropZone);
+	}, allowGrabZone.concat(dropZone));
 
-	const moveFromStack = () => {
-		if (stackRef.current == null) return;
-		const state = structuredClone(stateTemplate);
-		state.visibleArrow = true;
+	const changeCardState = (cardIndex: number, newState: ICardState) => {
+		const newList = [...cardDataList];
+		const currentCard = newList[cardIndex]; // find element from a new list
+		if (!currentCard) return;
 
-		if (stackRef.current.state.currentCardList.length < 1) return;
+		for (const [key, value] of Object.entries(newState)) {
+			if (currentCard.state[key] !== undefined) {
+				console.log(key, currentCard.state[key], "=>", value);
+				currentCard.state[key] = value;
+			}
+		}
+		setCardDataList(newList);
+	};
 
-		const index: number = stackRef.current.state.currentCardList.length - 1;
-		const currentCard = stackRef.current.state.currentCardList[index];
+	const moveFromStack = (currentCardList: ICardData[]) => {
+		if (currentCardList.length < 1) return;
+
+		const tmpIndex = currentCardList.length - 1;
+		const currentCard = currentCardList[tmpIndex];
+		const globalIndex = getGlobalCardIndex(currentCard);
 
 		// If a sorcery or instant card is the top card of the stack,
 		// it goes in the graveyard upon resolution
-		const destination: CardsSlot | null =
+		const destination: Zone =
 			currentCard.card.front_card.type_line.includes("Sorcery") ||
 			currentCard.card.front_card.type_line.includes("Instant")
-				? graveyardRef.current
-				: battlefieldRef.current;
-		stackRef.current?.moveChildrenTo(index, destination, state);
+				? Zone.Graveyard
+				: Zone.Battlefield;
+		changeCardState(globalIndex, { zone: destination, visibleArrow: true });
 	};
 
 	return (
 		<div className="playfield">
-			<CardsSlot
-				ref={battlefieldRef}
+			<FnCardsSlot
+				ref={ZoneRef.get(Zone.Battlefield)!}
 				id="battlefield-slot"
-				card_list={[]}
+				cardList={cardDataList.filter((card) => card.state.zone == Zone.Battlefield)}
+				isOverlapped={false}
 				cardContextMenu={[
 					{
 						id: "to-graveyard",
 						caption: "Move to Graveyard",
 						onClick: (cardIndex) => {
-							battlefieldRef.current?.moveChildrenTo(cardIndex, graveyardRef.current);
+							changeCardState(cardIndex, { zone: Zone.Graveyard });
 							// console.log("test caption click");
 						},
 					},
@@ -142,26 +152,77 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 						id: "to-exile",
 						caption: "Move to Exile",
 						onClick: (cardIndex) => {
-							battlefieldRef.current?.moveChildrenTo(cardIndex, exileRef.current);
+							changeCardState(cardIndex, { zone: Zone.Exile });
+						},
+					},
+					{
+						id: "face-down",
+						caption: "Toggle Facing",
+						onClick: (cardIndex) => {
+							changeCardState(cardIndex, { isFrontSide: !cardDataList[cardIndex].state.isFrontSide });
 						},
 					},
 				]}
 			/>
-
-			<CardsContainer
-				ref={deckPileRef}
+			<FnCardsSlot
+				ref={ZoneRef.get(Zone.Deck)!}
 				id="deck-pile-slot"
 				placeholder="Deck"
-				card_list={CardDataList}
-				onClick={() => deckPileRef.current?.moveChildrenTo(0, stackRef.current, structuredClone(stateTemplate))}
+				isOverlapped={false}
+				cardList={cardDataList.filter((card) => card.state.zone == Zone.Deck)}
+				onClick={() => {
+					changeCardState(
+						cardDataList.findIndex((card) => card.state.zone == Zone.Deck),
+						{ zone: Zone.Stack, isFrontSide: true },
+					);
+				}}
 			/>
 
-			<CardsContainer ref={exileRef} id="exile-slot" placeholder="Exile" card_list={[]} />
+			<FnCardsSlot
+				ref={ZoneRef.get(Zone.Exile)!}
+				id="exile-slot"
+				placeholder="Exile"
+				isOverlapped={false}
+				cardList={cardDataList.filter((card) => card.state.zone == Zone.Exile)}
+			/>
 
-			<CardsContainer ref={graveyardRef} id="graveyard-slot" placeholder="Graveyard" card_list={[]} />
+			<FnCardsSlot
+				ref={ZoneRef.get(Zone.Graveyard)!}
+				id="graveyard-slot"
+				placeholder="Graveyard"
+				isOverlapped={false}
+				cardList={cardDataList.filter((card) => card.state.zone == Zone.Graveyard)}
+			/>
 
-			<CardsSlot ref={handRef} id="hand-slot" card_list={[]} />
-			<CardsSlot ref={stackRef} id="stack-slot" card_list={[]} onClick={moveFromStack} />
+			<FnCardsSlot
+				ref={ZoneRef.get(Zone.Hand)!}
+				id="hand-slot"
+				isOverlapped={false}
+				cardList={cardDataList.filter((card) => card.state.zone == Zone.Hand)}
+			/>
+			<FnCardsSlot
+				ref={ZoneRef.get(Zone.Stack)!}
+				id="stack-slot"
+				isOverlapped={false}
+				cardList={cardDataList.filter((card) => card.state.zone == Zone.Stack)}
+				onClick={moveFromStack}
+				cardContextMenu={[
+					{
+						id: "to-graveyard",
+						caption: "Move to Graveyard",
+						onClick: (cardIndex) => {
+							changeCardState(cardIndex, { zone: Zone.Graveyard });
+						},
+					},
+					{
+						id: "to-exile",
+						caption: "Move to Exile",
+						onClick: (cardIndex) => {
+							changeCardState(cardIndex, { zone: Zone.Exile });
+						},
+					},
+				]}
+			/>
 		</div>
 	);
 }

@@ -68,7 +68,8 @@
         }
 
         .revertCard {
-            top: 48%;
+            top: 5%;
+            left: 5%;
         }
     }
 
@@ -89,7 +90,7 @@
     }
 
     .returnCard {
-        top: 70%;
+        top: 48%;
     }
 
     .card-back-side {

@@ -1,6 +1,6 @@
 import { Deck } from "../models/Deck";
 import "./components.css";
-import { FnCardsSlot } from "./CardContainer";
+import { CardsSlot } from "./CardContainer";
 import { useEffect, useRef, useState } from "react";
 import { ICardData, ICardState, Zone } from "../middleware/IType";
 import { calculateCoord, canDragCard, getGlobalCardIndex, newFullDeck } from "../middleware/battlefieldHelper";
@@ -132,7 +132,7 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 
 	return (
 		<div className="playfield">
-			<FnCardsSlot
+			<CardsSlot
 				ref={ZoneRef.get(Zone.Battlefield)!}
 				id="battlefield-slot"
 				cardList={cardDataList.filter((card) => card.state.zone == Zone.Battlefield)}
@@ -161,7 +161,7 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 					},
 				]}
 			/>
-			<FnCardsSlot
+			<CardsSlot
 				ref={ZoneRef.get(Zone.Deck)!}
 				id="deck-pile-slot"
 				placeholder="Deck"
@@ -174,26 +174,26 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 				}}
 			/>
 
-			<FnCardsSlot
+			<CardsSlot
 				ref={ZoneRef.get(Zone.Exile)!}
 				id="exile-slot"
 				placeholder="Exile"
 				cardList={cardDataList.filter((card) => card.state.zone == Zone.Exile)}
 			/>
 
-			<FnCardsSlot
+			<CardsSlot
 				ref={ZoneRef.get(Zone.Graveyard)!}
 				id="graveyard-slot"
 				placeholder="Graveyard"
 				cardList={cardDataList.filter((card) => card.state.zone == Zone.Graveyard)}
 			/>
 
-			<FnCardsSlot
+			<CardsSlot
 				ref={ZoneRef.get(Zone.Hand)!}
 				id="hand-slot"
 				cardList={cardDataList.filter((card) => card.state.zone == Zone.Hand)}
 			/>
-			<FnCardsSlot
+			<CardsSlot
 				ref={ZoneRef.get(Zone.Stack)!}
 				id="stack-slot"
 				cardList={cardDataList.filter((card) => card.state.zone == Zone.Stack)}

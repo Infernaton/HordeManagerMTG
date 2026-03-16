@@ -12,7 +12,7 @@ type CardContainerProps = {
 	onClick?: (currentCardList: ICardData[]) => void;
 };
 
-export function FnCardsSlot({ ref, id, placeholder, cardList, cardContextMenu, onClick }: CardContainerProps) {
+export function CardsSlot({ ref, id, placeholder, cardList, cardContextMenu, onClick }: CardContainerProps) {
 	let currentCardElements = cardList.map((cardData) => {
 		const idE = id + "_" + cardData.state.id;
 

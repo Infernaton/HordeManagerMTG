@@ -203,14 +203,14 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 						id: "to-graveyard",
 						caption: "Move to Graveyard",
 						onClick: (cardIndex) => {
-							changeCardState(cardIndex, { zone: Zone.Graveyard });
+							changeCardState(cardIndex, { zone: Zone.Graveyard, visibleArrow: true });
 						},
 					},
 					{
 						id: "to-exile",
 						caption: "Move to Exile",
 						onClick: (cardIndex) => {
-							changeCardState(cardIndex, { zone: Zone.Exile });
+							changeCardState(cardIndex, { zone: Zone.Exile, visibleArrow: true });
 						},
 					},
 				]}

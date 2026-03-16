@@ -1,4 +1,4 @@
-import { CardDisplayComponent } from "./CardShowcase";
+import { CardShowcase } from "./CardShowcase";
 import { ICardData } from "../middleware/IType";
 import ContextMenu, { ContextMenuItem } from "./ContextMenu";
 import { getGlobalCardIndex } from "../middleware/battlefieldHelper";
@@ -9,24 +9,15 @@ type CardContainerProps = {
 	placeholder?: string;
 	cardList: ICardData[];
 	cardContextMenu?: ContextMenuItem[];
-	isOverlapped: boolean;
 	onClick?: (currentCardList: ICardData[]) => void;
 };
 
 export function FnCardsSlot({ ref, id, placeholder, cardList, cardContextMenu, onClick }: CardContainerProps) {
-	// 	state = {
-	// 		overlapped: false,
-	// 		currentCardList: this.props.cardList,
-	// 	};
-
-	// 	overlapped(isOverlapped: boolean) {
-	// 		this.setState({ overlapped: isOverlapped });
-	// 	}
 	let currentCardElements = cardList.map((cardData) => {
 		const idE = id + "_" + cardData.state.id;
 
 		const card = (
-			<CardDisplayComponent
+			<CardShowcase
 				card={cardData.card}
 				occurence={1}
 				colorBack={cardData.state.sleeveColor}

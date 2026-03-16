@@ -1,6 +1,6 @@
 import "./components.css";
 import { Card } from "../models/Card";
-import { CardDisplayComponent } from "./CardShowcase";
+import { CardShowcase } from "./CardShowcase";
 
 interface CardDisplay {
 	id: string;
@@ -26,7 +26,7 @@ function CardList({ cardList, color }: { cardList: Card[]; color?: string }) {
 		<div className="card-container col7">
 			{uniqueCard.length > 0 &&
 				uniqueCard.map((cardObj) => (
-					<CardDisplayComponent
+					<CardShowcase
 						key={cardObj.id}
 						card={cardObj.card_data}
 						occurence={cardObj.occurence}

@@ -4,7 +4,7 @@ import { FnCardsSlot } from "./CardContainer";
 import { useEffect, useRef, useState } from "react";
 import { ICardData, ICardState, Zone } from "../middleware/IType";
 import { calculateCoord, canDragCard, getGlobalCardIndex, newFullDeck } from "../middleware/battlefieldHelper";
-import { isParent, shuffle, toNumber } from "../middleware/handler";
+import { isParent } from "../middleware/handler";
 
 function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }) {
 	const Deck = deck.sections[0];
@@ -136,7 +136,6 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 				ref={ZoneRef.get(Zone.Battlefield)!}
 				id="battlefield-slot"
 				cardList={cardDataList.filter((card) => card.state.zone == Zone.Battlefield)}
-				isOverlapped={false}
 				cardContextMenu={[
 					{
 						id: "to-graveyard",
@@ -166,7 +165,6 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 				ref={ZoneRef.get(Zone.Deck)!}
 				id="deck-pile-slot"
 				placeholder="Deck"
-				isOverlapped={false}
 				cardList={cardDataList.filter((card) => card.state.zone == Zone.Deck)}
 				onClick={() => {
 					changeCardState(
@@ -180,7 +178,6 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 				ref={ZoneRef.get(Zone.Exile)!}
 				id="exile-slot"
 				placeholder="Exile"
-				isOverlapped={false}
 				cardList={cardDataList.filter((card) => card.state.zone == Zone.Exile)}
 			/>
 
@@ -188,20 +185,17 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 				ref={ZoneRef.get(Zone.Graveyard)!}
 				id="graveyard-slot"
 				placeholder="Graveyard"
-				isOverlapped={false}
 				cardList={cardDataList.filter((card) => card.state.zone == Zone.Graveyard)}
 			/>
 
 			<FnCardsSlot
 				ref={ZoneRef.get(Zone.Hand)!}
 				id="hand-slot"
-				isOverlapped={false}
 				cardList={cardDataList.filter((card) => card.state.zone == Zone.Hand)}
 			/>
 			<FnCardsSlot
 				ref={ZoneRef.get(Zone.Stack)!}
 				id="stack-slot"
-				isOverlapped={false}
 				cardList={cardDataList.filter((card) => card.state.zone == Zone.Stack)}
 				onClick={moveFromStack}
 				cardContextMenu={[

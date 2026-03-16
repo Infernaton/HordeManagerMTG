@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useRef, useState } from "react";
+import { MouseEvent, PropsWithChildren, useEffect, useRef, useState } from "react";
 import "./components.css";
 import { getLocalPosition } from "../middleware/handler";
 
@@ -33,7 +33,7 @@ function ContextMenu({ items, cardIndex, children, id }: PropsWithChildren<Props
 		}
 	};
 
-	const clickHandler = (e: MouseEvent) => {
+	const clickHandler = (e: PointerEvent) => {
 		if (!isVisible) return;
 		const rect = ref.current?.getBoundingClientRect();
 		if (
@@ -86,7 +86,8 @@ function ContextMenu({ items, cardIndex, children, id }: PropsWithChildren<Props
 					{items.map((item) => (
 						<li
 							key={item.id}
-							onClick={() => {
+							onClick={(e: MouseEvent) => {
+								e.stopPropagation();
 								setIsVisible(false);
 								item.onClick(cardIndex);
 							}}>

@@ -1,5 +1,5 @@
 import "./components.css";
-import { Component, ReactNode, useState } from "react";
+import { Component, ReactNode, useEffect, useState } from "react";
 import { Card } from "../models/Card";
 import { ICardState } from "../middleware/IType";
 
@@ -14,6 +14,11 @@ type CardDisplayProps = {
 export function CardShowcase({ card, occurence, colorBack, frontFaceVisible, visibleArrow }: CardDisplayProps) {
 	const [isFrontFaceSide, setIsFrontFaceSide] = useState(true);
 	const [isFrontSide, setIsFrontSide] = useState(frontFaceVisible ?? true);
+
+	useEffect(() => {
+		if (frontFaceVisible === undefined) return;
+		setIsFrontSide(frontFaceVisible);
+	}, [frontFaceVisible]);
 
 	const changeSide = () => setIsFrontFaceSide(!isFrontFaceSide);
 	const returnCard = () => setIsFrontSide(!isFrontSide);

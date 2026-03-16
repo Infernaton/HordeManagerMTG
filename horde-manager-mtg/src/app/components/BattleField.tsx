@@ -21,19 +21,24 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 	const allowGrabZone = [Zone.Battlefield, Zone.Graveyard, Zone.Exile];
 	const dropZone = [Zone.Battlefield, Zone.Graveyard, Zone.Exile];
 
-	const setupEvent = (
-		zoneRef: Map<Zone, React.RefObject<HTMLDivElement | null>>,
-		allowGrabZone: Zone[],
-		dropZone: Zone[],
-	): void => {
+	const getContainer = (slot: Zone) => {
+		return ZoneRef.get(slot)?.current?.querySelector<HTMLElement>(".container");
+	};
+
+	const setupEvent = (allowGrabZone: Zone[], dropZone: Zone[]): void => {
 		let dragging: HTMLElement | null = null;
 		let currentContainer = (): HTMLElement | null | undefined => dragging?.closest(".card-list");
 		let nextDropSlot: Zone | null = null;
 
 		const setOverlapped = (slot: Zone, isOverlapped: boolean) => {
 			// slot.overlapped(isOverlapped);
-			if (isOverlapped) nextDropSlot = slot;
-			else if (nextDropSlot == slot) nextDropSlot = null;
+			if (isOverlapped) {
+				getContainer(slot)?.classList.add("overlapping");
+				nextDropSlot = slot;
+			} else if (nextDropSlot == slot) {
+				getContainer(slot)?.classList.remove("overlapping");
+				nextDropSlot = null;
+			}
 		};
 
 		document.addEventListener("pointerdown", (e: PointerEvent) => {
@@ -61,7 +66,7 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 		});
 
 		dropZone.forEach((el) => {
-			const dropContainer = document.querySelector<HTMLElement>(`#${zoneRef.get(el)!.current?.id} .container`);
+			const dropContainer = getContainer(el);
 			if (!dropContainer) return;
 
 			dropContainer.addEventListener("pointerenter", () => {
@@ -77,18 +82,11 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 			if (dragging) {
 				dragging.classList.remove("dragging");
 
-				if (nextDropSlot) {
-					// moveToNewSlot(dragging, allowGrabZone, nextDropSlot);
-					// // get index of the card in the container internal list
-					// const index = Array.prototype.indexOf.call(dragging.parentElement?.children, dragging);
+				if (nextDropSlot !== null) {
+					// get index of the card in the container internal list
+					const index = getGlobalCardIndex(dragging);
 
-					// // get container as CardsSlot object
-					// const originSlot = possibleOriginParent.find((zone) => {
-					// 	const container = document.getElementById(zone.current.props.id);
-					// 	if (!container) return;
-					// 	return isParent(dragged, container);
-					// });
-					// originSlot?.current.moveChildrenTo(index, nextDropSlot);
+					changeCardState(index, { zone: nextDropSlot });
 					setOverlapped(nextDropSlot, false);
 				}
 			}
@@ -98,7 +96,7 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 	};
 
 	useEffect(() => {
-		setupEvent(ZoneRef, allowGrabZone, dropZone);
+		setupEvent(allowGrabZone, dropZone);
 	}, allowGrabZone.concat(dropZone));
 
 	const changeCardState = (cardIndex: number, newState: ICardState) => {
@@ -107,7 +105,7 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 		if (!currentCard) return;
 
 		for (const [key, value] of Object.entries(newState)) {
-			if (currentCard.state[key] !== undefined) {
+			if (currentCard.state[key] !== undefined && currentCard.state[key] != value) {
 				console.log(key, currentCard.state[key], "=>", value);
 				currentCard.state[key] = value;
 			}

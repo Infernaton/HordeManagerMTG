@@ -19,8 +19,16 @@ export function newFullDeck(cardList: Card[], sleeveColor: string) {
 	});
 }
 
-export function getGlobalCardIndex(card: ICardData) {
-	return toNumber(card.state.id!.slice(card.state.id!.indexOf("_") + 1));
+export function getGlobalCardIndex(card: ICardData): number;
+export function getGlobalCardIndex(card: HTMLElement): number;
+export function getGlobalCardIndex(card: any): number {
+	let id = "";
+	if (card instanceof HTMLElement) {
+		id = card.id;
+	} else if (typeof card === "object") {
+		id = card.state.id;
+	}
+	return toNumber(id.slice(id.lastIndexOf("_") + 1));
 }
 
 export function canDragCard(clickedTarget: HTMLElement, allowID: string[]) {

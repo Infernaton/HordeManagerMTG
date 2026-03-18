@@ -163,7 +163,7 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 				onClick={() => {
 					changeCardState(
 						cardDataList.findIndex((card) => card.state.zone == Zone.Deck),
-						{ zone: Zone.Stack, isFrontSide: true },
+						{ zone: handVisible ? Zone.Hand : Zone.Stack, isFrontSide: true },
 					);
 				}}
 			/>
@@ -186,6 +186,29 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 				ref={ZoneRef.get(Zone.Hand)!}
 				id="hand-slot"
 				cardList={cardDataList.filter((card) => card.state.zone == Zone.Hand)}
+				cardContextMenu={[
+					{
+						id: "to-stack",
+						caption: "Move to Stack",
+						onClick: (cardIndex) => {
+							changeCardState(cardIndex, { zone: Zone.Stack });
+						},
+					},
+					{
+						id: "to-graveyard",
+						caption: "Move to Graveyard",
+						onClick: (cardIndex) => {
+							changeCardState(cardIndex, { zone: Zone.Graveyard, visibleArrow: true });
+						},
+					},
+					{
+						id: "to-exile",
+						caption: "Move to Exile",
+						onClick: (cardIndex) => {
+							changeCardState(cardIndex, { zone: Zone.Exile, visibleArrow: true });
+						},
+					},
+				]}
 			/>
 			<CardsSlot
 				ref={ZoneRef.get(Zone.Stack)!}

@@ -190,7 +190,7 @@
         }
 
         .card-list {
-            width: 100%;
+            /* width: 100%; */
             height: 100%;
             position: relative;
 
@@ -271,6 +271,7 @@
     }
 
     #hand-slot {
+        --card-width: 12em;
         bottom: 0;
         left: 50%;
         transform: translateX(-50%);
@@ -286,30 +287,34 @@
         }
 
         .card-list {
-            display: flex;
-            align-items: center;
-            flex-wrap: nowrap;
+            margin: 0 calc(var(--card-width) / 2);
         }
 
         .card-holder {
-            --ratio: calc(sibling-index() * 100 / sibling-count());
-            --ratio2: calc(100 / (sibling-count() * 2));
-            --calc: calc((var(--ratio) - var(--ratio2)));
-            --card-width: 12em;
+            --max-gap: 100 / 9;
+            /* (mGap + (100% - n * mGap) / n) => if the result is negative, will be substract to gap  */
+            --gap: min(var(--max-gap), calc(var(--max-gap) + (100 - sibling-count() * var(--max-gap)) / sibling-count()));
+
+            /* (centerPoint - gap * ((n - 1) / 2)) */
+            --init: calc(50 - var(--gap) * ((sibling-count() - 1) / 2));
+            /* (initPos + (i-1) * gap) */
+            --calc: calc(var(--init) + var(--gap) * (sibling-index() - 1));
+
             transition: all 0.2s ease-out;
             aspect-ratio: 7 / 10;
             width: var(--card-width);
-            /* translate: -50%; */
+
             left: calc(var(--calc) * 1% - var(--card-width) / 2);
             /* move to half the size of the card to prevent translate uses */
-            bottom: -250px;
+            bottom: -16em;
         }
 
         &:hover .card-holder {
             bottom: 0;
 
             &:not(:hover) {
-                rotate: calc(var(--calc) * 1deg - 50deg);
+                /* rotate: calc(1px - 50deg); */
+                rotate: calc(var(--calc) * 2 * 1deg - 50deg);
                 --circle-effect: calc(-1 / 30 * ((var(--calc) - 50) * (var(--calc) - 50)));
                 bottom: calc(var(--circle-effect) * 2px);
             }

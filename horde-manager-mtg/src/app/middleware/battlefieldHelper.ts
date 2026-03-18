@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { Card } from "../models/Card";
-import { shuffle, stayRange, toNumber } from "./handler";
+import { shuffle, clamp, toNumber } from "./handler";
 import { ICardData, ICardState, Zone } from "./IType";
 
 export const defineZoneRef = () => {
@@ -70,7 +70,7 @@ export function calculateCoord(
 
 	const maxCoordinates = [container.offsetWidth - dragged.offsetWidth, container.offsetHeight - dragged.offsetHeight];
 	return [
-		stayRange(0, maxCoordinates[0], startingCoord[0] - container.offsetLeft - dragged.offsetWidth / 2),
-		stayRange(0, maxCoordinates[1], startingCoord[1] - container.offsetTop - dragged.offsetHeight / 2),
+		clamp(0, maxCoordinates[0], startingCoord[0] - container.offsetLeft - dragged.offsetWidth / 2),
+		clamp(0, maxCoordinates[1], startingCoord[1] - container.offsetTop - dragged.offsetHeight / 2),
 	];
 }

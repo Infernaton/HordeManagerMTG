@@ -27,7 +27,7 @@ export function toNumber(string: string) {
 	return Number(string);
 }
 
-export function stayRange(from: number, to: number, value: number) {
+export function clamp(from: number, to: number, value: number) {
 	return Math.min(Math.max(from, value), to);
 }
 

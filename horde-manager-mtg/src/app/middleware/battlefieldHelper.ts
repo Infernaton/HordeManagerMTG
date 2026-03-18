@@ -1,6 +1,18 @@
+import { useRef } from "react";
 import { Card } from "../models/Card";
 import { shuffle, stayRange, toNumber } from "./handler";
 import { ICardData, ICardState, Zone } from "./IType";
+
+export const defineZoneRef = () => {
+	const ZoneRef: Map<Zone, React.RefObject<HTMLDivElement | null>> = new Map();
+	ZoneRef.set(Zone.Deck, useRef<HTMLDivElement>(null));
+	ZoneRef.set(Zone.Graveyard, useRef<HTMLDivElement>(null));
+	ZoneRef.set(Zone.Exile, useRef<HTMLDivElement>(null));
+	ZoneRef.set(Zone.Hand, useRef<HTMLDivElement>(null));
+	ZoneRef.set(Zone.Stack, useRef<HTMLDivElement>(null));
+	ZoneRef.set(Zone.Battlefield, useRef<HTMLDivElement>(null));
+	return ZoneRef;
+};
 
 export function newFullDeck(cardList: Card[], sleeveColor: string) {
 	return shuffle(cardList).map((card, index) => {

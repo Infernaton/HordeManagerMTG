@@ -1,29 +1,27 @@
-import { Deck } from "../models/Deck";
 import "./components.css";
+import { Deck } from "../models/Deck";
 import { CardsSlot } from "./CardContainer";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { ICardData, ICardState, Zone } from "../middleware/IType";
-import { calculateCoord, canDragCard, getGlobalCardIndex, newFullDeck } from "../middleware/battlefieldHelper";
-import { isParent } from "../middleware/handler";
+import {
+	calculateCoord,
+	canDragCard,
+	defineZoneRef,
+	getGlobalCardIndex,
+	newFullDeck,
+} from "../middleware/battlefieldHelper";
+import { isParent, patchObject } from "../middleware/handler";
 
 function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }) {
 	const Deck = deck.sections[0];
 	const [cardDataList, setCardDataList] = useState<ICardData[]>(newFullDeck(Deck.card_list, Deck.color));
 
-	const ZoneRef: Map<Zone, React.RefObject<HTMLDivElement | null>> = new Map();
-	ZoneRef.set(Zone.Deck, useRef<HTMLDivElement>(null));
-	ZoneRef.set(Zone.Graveyard, useRef<HTMLDivElement>(null));
-	ZoneRef.set(Zone.Exile, useRef<HTMLDivElement>(null));
-	ZoneRef.set(Zone.Hand, useRef<HTMLDivElement>(null));
-	ZoneRef.set(Zone.Stack, useRef<HTMLDivElement>(null));
-	ZoneRef.set(Zone.Battlefield, useRef<HTMLDivElement>(null));
+	const ZoneRef = defineZoneRef();
 
 	const allowGrabZone = [Zone.Battlefield, Zone.Graveyard, Zone.Exile];
 	const dropZone = [Zone.Battlefield, Zone.Graveyard, Zone.Exile];
 
-	const getContainer = (slot: Zone) => {
-		return ZoneRef.get(slot)?.current?.querySelector<HTMLElement>(".container");
-	};
+	const getContainer = (slot: Zone) => ZoneRef.get(slot)?.current?.querySelector<HTMLElement>(".container");
 
 	const setupEvent = (allowGrabZone: Zone[], dropZone: Zone[]): void => {
 		let dragging: HTMLElement | null = null;
@@ -104,12 +102,8 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 		const currentCard = newList[cardIndex]; // find element from a new list
 		if (!currentCard) return;
 
-		for (const [key, value] of Object.entries(newState)) {
-			if (currentCard.state[key] !== undefined && currentCard.state[key] != value) {
-				console.log(key, currentCard.state[key], "=>", value);
-				currentCard.state[key] = value;
-			}
-		}
+		currentCard.state = patchObject(currentCard.state, newState);
+
 		setCardDataList(newList);
 	};
 

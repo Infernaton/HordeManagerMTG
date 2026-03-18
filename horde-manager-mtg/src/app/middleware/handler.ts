@@ -13,55 +13,15 @@ export function useData<T>(callback: (...args: any[]) => Promise<T>, ...args: an
 	return data;
 }
 
-export function useLongPress(
-	onLongPress: () => void,
-	onClick: () => void,
-	{ shouldPreventDefault = true, delay = 300 } = {},
-) {
-	const [longPressTriggered, setLongPressTriggered] = useState(false);
-	const timeout = useRef<number>(undefined);
-	const target = useRef<HTMLElement>(undefined);
-
-	const start = useCallback(
-		(event: React.UIEvent) => {
-			if (shouldPreventDefault && event.target) {
-				(event.target as HTMLElement).addEventListener("touchend", preventDefault, { passive: false });
-				target.current = event.target as HTMLElement;
-			}
-			timeout.current = setTimeout(() => {
-				onLongPress();
-				setLongPressTriggered(true);
-			}, delay);
-		},
-		[onLongPress, delay, shouldPreventDefault],
-	);
-
-	const clear = useCallback(
-		(event: React.UIEvent, shouldTriggerClick = true) => {
-			timeout.current && clearTimeout(timeout.current);
-			shouldTriggerClick && !longPressTriggered && onClick();
-			setLongPressTriggered(false);
-			if (shouldPreventDefault && target.current) {
-				(target.current as HTMLElement).removeEventListener("touchend", preventDefault);
-			}
-		},
-		[shouldPreventDefault, onClick, longPressTriggered],
-	);
-
-	return {
-		onMouseDown: (e: React.MouseEvent) => start(e),
-		onTouchStart: (e: React.TouchEvent) => start(e),
-		onMouseUp: (e: React.MouseEvent) => clear(e),
-		onMouseLeave: (e: React.MouseEvent) => clear(e, false),
-		onTouchEnd: (e: React.TouchEvent) => clear(e),
-	};
-}
-
-const preventDefault = (event: TouchEvent) => {
-	if (event.touches.length < 2 && event.preventDefault) {
-		event.preventDefault();
+export function patchObject(oldObject: { [key: string]: any }, update: object) {
+	for (const [key, value] of Object.entries(update)) {
+		if (oldObject[key] !== undefined && oldObject[key] != value) {
+			console.log(key, oldObject[key], "=>", value);
+			oldObject[key] = value;
+		}
 	}
-};
+	return oldObject;
+}
 
 export function toNumber(string: string) {
 	return Number(string);

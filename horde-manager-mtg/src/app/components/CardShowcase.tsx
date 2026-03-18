@@ -1,7 +1,6 @@
 import "./components.css";
-import { Component, ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "../models/Card";
-import { ICardState } from "../middleware/IType";
 
 type CardDisplayProps = {
 	card: Card;

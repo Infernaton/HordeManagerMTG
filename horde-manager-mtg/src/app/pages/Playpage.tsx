@@ -1,3 +1,4 @@
+import "./App.css";
 import { useEffect } from "react";
 import BattleField from "../components/BattleField";
 import { Deck } from "../models/Deck";

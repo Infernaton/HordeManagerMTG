@@ -1,6 +1,6 @@
+import "./components.css";
 import { Section } from "../models/Section";
 import CardList from "./CardList";
-import "./components.css";
 
 function PhaseCardList({ title, phase }: { title: string; phase: Section }) {
 	return (

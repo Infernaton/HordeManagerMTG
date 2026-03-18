@@ -4,7 +4,6 @@ import "./index.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import DeckList from "./app/pages/DeckList";
 import DeckPage from "./app/pages/Deckpage";
-import "./app/pages/App.css";
 import Playpage from "./app/pages/Playpage";
 
 const root = createRoot(document.getElementById("root") as HTMLElement);

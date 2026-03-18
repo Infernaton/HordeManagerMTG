@@ -4,7 +4,6 @@ import { Link, useNavigate, useParams } from "react-router";
 import PhaseCardList from "../components/PhaseCardList";
 import { useData } from "../middleware/handler";
 import { Deck } from "../models/Deck";
-import { useEffect, useState } from "react";
 
 /**
  * Save the deck in local storage when clicked to use it to play

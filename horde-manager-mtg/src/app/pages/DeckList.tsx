@@ -1,3 +1,4 @@
+import "./App.css";
 import ListDeckCard from "../components/ListDeckCard";
 import { Store } from "../store";
 import { useData } from "../middleware/handler";

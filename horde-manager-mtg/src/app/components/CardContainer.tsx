@@ -1,3 +1,4 @@
+import "./components.css";
 import { CardShowcase } from "./CardShowcase";
 import { ICardData } from "../middleware/IType";
 import ContextMenu, { ContextMenuItem } from "./ContextMenu";

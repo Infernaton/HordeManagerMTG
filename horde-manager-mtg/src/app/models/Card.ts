@@ -1,4 +1,4 @@
-class CardFace {
+export class CardFace {
 	name: string;
 	mana_cost?: string;
 	type_line: string;
@@ -29,7 +29,7 @@ class CardFace {
 	}
 }
 
-class CreatureCardFace extends CardFace {
+export class CreatureCardFace extends CardFace {
 	power: string;
 	toughness: string;
 
@@ -43,7 +43,7 @@ class CreatureCardFace extends CardFace {
 /**
  * Correspond to Battle and Planeswalker card
  */
-class PointCardFace extends CardFace {
+export class PointCardFace extends CardFace {
 	point: string; // Loyalty or Defense point
 
 	constructor(fetch: any) {

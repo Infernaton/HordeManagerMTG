@@ -19,7 +19,7 @@ export function newFullDeck(cardList: Card[], sleeveColor: string) {
 		const state: ICardState = {
 			id: card.id + "_" + index,
 			sleeveColor: sleeveColor, // deck.sections[0].color,
-			isFrontFaceSide: false,
+			isFrontFaceSide: true,
 			isFrontSide: false,
 			visibleArrow: false,
 			zone: Zone.Deck,

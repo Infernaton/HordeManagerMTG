@@ -20,6 +20,10 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 
 	const allowGrabZone = [Zone.Battlefield, Zone.Graveyard, Zone.Exile];
 	const dropZone = [Zone.Battlefield, Zone.Graveyard, Zone.Exile];
+	if (handVisible) {
+		allowGrabZone.push(Zone.Hand);
+		dropZone.push(Zone.Hand);
+	}
 
 	const getContainer = (slot: Zone) => ZoneRef.get(slot)?.current?.querySelector<HTMLElement>(".container");
 
@@ -42,7 +46,7 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 		document.addEventListener("pointerdown", (e: PointerEvent) => {
 			const target = canDragCard(
 				e.target as HTMLElement,
-				allowGrabZone.map((el) => ZoneRef.get(el)!.current!.id),
+				allowGrabZone.map((el) => ZoneRef.get(el)!.current!.id ?? ""),
 			);
 			// prevent drag if a other click than e.button == 0 (left click) was pressed
 			if (!target || e.button != 0) return;
@@ -134,21 +138,16 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 					{
 						id: "to-graveyard",
 						caption: "Move to Graveyard",
-						onClick: (cardIndex) => {
-							changeCardState(cardIndex, { zone: Zone.Graveyard });
-							// console.log("test caption click");
-						},
+						onClick: (cardIndex) => changeCardState(cardIndex, { zone: Zone.Graveyard }),
 					},
 					{
 						id: "to-exile",
 						caption: "Move to Exile",
-						onClick: (cardIndex) => {
-							changeCardState(cardIndex, { zone: Zone.Exile });
-						},
+						onClick: (cardIndex) => changeCardState(cardIndex, { zone: Zone.Exile }),
 					},
 					{
 						id: "face-down",
-						caption: "Toggle Facing",
+						caption: "Face Down/Up",
 						onClick: (cardIndex) => {
 							changeCardState(cardIndex, { isFrontSide: !cardDataList[cardIndex].state.isFrontSide });
 						},

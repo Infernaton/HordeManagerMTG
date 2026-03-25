@@ -12,6 +12,7 @@ export type ContextMenuItem = {
 	id: string;
 	caption: string;
 	onClick: (index: number) => void;
+	isHidden?: (index: number) => boolean;
 };
 
 function ContextMenu({ items, cardIndex, children, id }: PropsWithChildren<Props>) {
@@ -83,17 +84,20 @@ function ContextMenu({ items, cardIndex, children, id }: PropsWithChildren<Props
 			<div onContextMenu={contextMenuHandler}>{children}</div>
 			{isVisible && (
 				<ul ref={ref} style={{ left: position.x, top: position.y }} className="context-menu">
-					{items.map((item) => (
-						<li
-							key={item.id}
-							onClick={(e: MouseEvent) => {
-								e.stopPropagation();
-								setIsVisible(false);
-								item.onClick(cardIndex);
-							}}>
-							{item.caption}
-						</li>
-					))}
+					{items.map((item) => {
+						if (item.isHidden?.(cardIndex)) return "";
+						return (
+							<li
+								key={item.id}
+								onClick={(e: MouseEvent) => {
+									e.stopPropagation();
+									setIsVisible(false);
+									item.onClick(cardIndex);
+								}}>
+								{item.caption}
+							</li>
+						);
+					})}
 				</ul>
 			)}
 		</>

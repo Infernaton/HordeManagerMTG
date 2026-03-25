@@ -152,6 +152,16 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 							changeCardState(cardIndex, { isFrontSide: !cardDataList[cardIndex].state.isFrontSide });
 						},
 					},
+					{
+						id: "turn",
+						caption: "Turn Over",
+						onClick: (cardIndex) => {
+							changeCardState(cardIndex, {
+								isFrontFaceSide: !cardDataList[cardIndex].state.isFrontFaceSide,
+							});
+						},
+						isHidden: (cardIndex) => cardDataList[cardIndex].card.back_card == undefined,
+					},
 				]}
 			/>
 			<CardsSlot

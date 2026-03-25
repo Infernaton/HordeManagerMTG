@@ -66,31 +66,6 @@
                 padding: 0.15em 0.5em;
             }
         }
-
-        .revertCard {
-            top: 5%;
-            left: 5%;
-        }
-    }
-
-    .revertCard,
-    .returnCard {
-        left: 50%;
-        transform: translate(-50%, -50%);
-        cursor: pointer;
-        /* virtually increase size of the button */
-        padding: 0.5em;
-        user-select: none;
-
-        &>* {
-            padding: 4px 8px;
-            cursor: pointer;
-        }
-
-    }
-
-    .returnCard {
-        top: 48%;
     }
 
     .card-back-side {
@@ -172,6 +147,9 @@
             box-shadow: inset 0px 0px 10px 0px #000;
         }
 
+
+        /* add overlay when a card has its context menu open */
+        .card-list .card-holder:has(.context-menu),
         &.overlapping {
             box-shadow: inset 0 0 10px 0px #eee, 0 0 10px 0px #eee;
         }
@@ -198,6 +176,21 @@
                 position: absolute;
                 width: 100%;
                 height: min-content;
+
+                .point-counter {
+                    border: 2px solid gray;
+                    background: gray;
+                    border-radius: 10px;
+                    margin: -.1em;
+                    padding: .2em;
+                    font-size: .8em;
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+                    box-shadow: inset -0.1em 0.2em 0.5em 0.05em black;
+                    word-spacing: -1px;
+                    text-shadow: 0px 0px 2px black;
+                }
             }
         }
     }
@@ -211,7 +204,6 @@
         .card-holder {
             cursor: grab;
             max-width: 10em;
-            z-index: 1;
             touch-action: none;
         }
 
@@ -313,9 +305,8 @@
             bottom: 0;
 
             &:not(:hover) {
-                /* rotate: calc(1px - 50deg); */
-                rotate: calc(var(--calc) * 2 * 1deg - 50deg);
                 --circle-effect: calc(-1 / 30 * ((var(--calc) - 50) * (var(--calc) - 50)));
+                rotate: calc(var(--calc) * 1deg - 50deg);
                 bottom: calc(var(--circle-effect) * 2px);
             }
         }

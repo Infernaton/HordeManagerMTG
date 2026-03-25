@@ -21,9 +21,9 @@ export function CardsSlot({ ref, id, placeholder, cardList, cardContextMenu, onC
 			<CardShowcase
 				card={cardData.card}
 				occurence={1}
-				colorBack={cardData.state.sleeveColor}
-				frontFaceVisible={cardData.state.isFrontSide}
-				visibleArrow={cardData.state.visibleArrow}
+				isFrontFaceSide={cardData.state.isFrontFaceSide}
+				isFrontSide={cardData.state.isFrontSide}
+				sleeveColor={cardData.state.sleeveColor}
 			/>
 		);
 

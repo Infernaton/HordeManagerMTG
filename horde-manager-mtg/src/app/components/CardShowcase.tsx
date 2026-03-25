@@ -1,32 +1,18 @@
 import "./components.css";
-import { useEffect, useState } from "react";
 import { Card } from "../models/Card";
 
 type CardDisplayProps = {
 	card: Card;
 	occurence: number;
-	colorBack?: string;
-	frontFaceVisible?: boolean;
-	visibleArrow?: boolean;
+	isFrontSide?: boolean;
+	isFrontFaceSide?: boolean;
+	sleeveColor?: string;
 };
 
-export function CardShowcase({ card, occurence, colorBack, frontFaceVisible, visibleArrow }: CardDisplayProps) {
-	const [isFrontFaceSide, setIsFrontFaceSide] = useState(true);
-	const [isFrontSide, setIsFrontSide] = useState(frontFaceVisible ?? true);
-
-	useEffect(() => {
-		if (frontFaceVisible === undefined) return;
-		setIsFrontSide(frontFaceVisible);
-	}, [frontFaceVisible]);
-
-	const changeSide = () => setIsFrontFaceSide(!isFrontFaceSide);
-	const returnCard = () => setIsFrontSide(!isFrontSide);
-
-	const seeArrowButton = visibleArrow ?? true;
-
+export function CardShowcase({ card, occurence, isFrontSide, isFrontFaceSide, sleeveColor }: CardDisplayProps) {
 	let backSide = null;
-	if (colorBack != undefined) {
-		const backgroundCover = { "--background-color": colorBack } as React.CSSProperties;
+	if (sleeveColor != undefined) {
+		const backgroundCover = { "--background-color": sleeveColor } as React.CSSProperties;
 		backSide = <div className="card-back-side" style={backgroundCover}></div>;
 	}
 
@@ -46,18 +32,8 @@ export function CardShowcase({ card, occurence, colorBack, frontFaceVisible, vis
 						<div>x {occurence}</div>
 					</div>
 				)}
-				{card.back_card && seeArrowButton && (
-					<div className="revertCard onCard" onClick={changeSide}>
-						<button>↩</button>
-					</div>
-				)}
 			</div>
 			{backSide ?? ""}
-			{backSide && seeArrowButton && (
-				<div className="returnCard onCard" onClick={returnCard}>
-					<button>↩</button>
-				</div>
-			)}
 		</div>
 	);
 }

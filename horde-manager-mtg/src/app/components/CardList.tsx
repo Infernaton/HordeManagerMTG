@@ -30,7 +30,7 @@ function CardList({ cardList, color }: { cardList: Card[]; color?: string }) {
 						key={cardObj.id}
 						card={cardObj.card_data}
 						occurence={cardObj.occurence}
-						colorBack={color}
+						sleeveColor={color}
 					/>
 				))}
 		</div>

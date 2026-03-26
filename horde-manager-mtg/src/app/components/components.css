@@ -242,9 +242,11 @@
         top: 50%;
         left: 0;
         transform: translateY(-50%);
+        pointer-events: none;
 
         &:has(.card) {
             z-index: 3;
+            pointer-events: all;
         }
 
         .container {

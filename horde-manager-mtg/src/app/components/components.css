@@ -292,22 +292,29 @@
             /* (initPos + (i-1) * gap) */
             --calc: calc(var(--init) + var(--gap) * (sibling-index() - 1));
 
-            transition: all 0.2s ease-out;
             aspect-ratio: 7 / 10;
             width: var(--card-width);
 
             left: calc(var(--calc) * 1% - var(--card-width) / 2);
             /* move to half the size of the card to prevent translate uses */
             bottom: -16em;
+
+            &:not(.dragging) {
+                transition: all 0.2s ease-out;
+            }
         }
 
-        &:hover .card-holder {
-            bottom: 0;
+        &:hover {
+            height: calc(var(--card-width) / 1.5);
 
-            &:not(:hover) {
-                --circle-effect: calc(-1 / 30 * ((var(--calc) - 50) * (var(--calc) - 50)));
-                rotate: calc(var(--calc) * 1deg - 50deg);
-                bottom: calc(var(--circle-effect) * 2px);
+            .card-holder {
+                bottom: 0;
+
+                &:not(:hover) {
+                    --circle-effect: calc(-1 / 30 * ((var(--calc) - 50) * (var(--calc) - 50)));
+                    rotate: calc(var(--calc) * 1deg - 50deg);
+                    bottom: calc(var(--circle-effect) * 2px);
+                }
             }
         }
     }

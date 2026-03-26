@@ -27,10 +27,6 @@ export function toNumber(string: string) {
 	return Number(string);
 }
 
-export function clamp(from: number, to: number, value: number) {
-	return Math.min(Math.max(from, value), to);
-}
-
 export function isOverlapping(a: HTMLElement, b: HTMLElement) {
 	const aBound = a.getBoundingClientRect();
 	const bBound = b.getBoundingClientRect();
@@ -64,4 +60,16 @@ export function shuffle(array: any[]) {
 		.map((value) => ({ value, sort: Math.random() }))
 		.sort((a, b) => a.sort - b.sort)
 		.map(({ value }) => value);
+}
+
+export function clamp(from: number, to: number, value: number) {
+	return Math.min(Math.max(from, value), to);
+}
+
+export function lerp(min: number, max: number, value: number) {
+	return min * (1 - value) + max * value;
+}
+
+export function invlerp(min: number, max: number, value: number) {
+	return clamp(0, 1, (value - min) / (max - min));
 }

@@ -61,16 +61,14 @@ export function canDragCard(clickedTarget: HTMLElement, allowID: string[]) {
 	return target;
 }
 
-export function calculateCoord(
-	container: HTMLElement | undefined | null,
-	dragged: HTMLElement,
-	startingCoord: [x: number, y: number],
-) {
-	if (!container) return;
-
-	const maxCoordinates = [container.offsetWidth - dragged.offsetWidth, container.offsetHeight - dragged.offsetHeight];
-	return [
-		clamp(0, maxCoordinates[0], startingCoord[0] - container.offsetLeft - dragged.offsetWidth / 2),
-		clamp(0, maxCoordinates[1], startingCoord[1] - container.offsetTop - dragged.offsetHeight / 2),
+export function calculateCoord(container: HTMLElement, dragged: HTMLElement, startingCoord: { x: number; y: number }) {
+	const rect = container.getBoundingClientRect();
+	const maxCoordinates = [
+		rect.width - dragged.offsetWidth - rect.left * 2,
+		rect.height - dragged.offsetHeight - rect.top * 2,
 	];
+	return {
+		x: clamp(0, maxCoordinates[0], startingCoord.x - rect.left - dragged.offsetWidth / 2),
+		y: clamp(0, maxCoordinates[1], startingCoord.y - rect.top - dragged.offsetHeight / 2),
+	};
 }

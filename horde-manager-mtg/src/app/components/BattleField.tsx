@@ -10,7 +10,7 @@ import {
 	getGlobalCardIndex,
 	newFullDeck,
 } from "../middleware/battlefieldHelper";
-import { isParent, patchObject } from "../middleware/handler";
+import { invlerp, isParent, patchObject } from "../middleware/handler";
 
 function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }) {
 	const Deck = deck.sections[0];
@@ -29,7 +29,7 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 
 	const setupEvent = (allowGrabZone: Zone[], dropZone: Zone[]): void => {
 		let dragging: HTMLElement | null = null;
-		let currentContainer = (): HTMLElement | null | undefined => dragging?.closest(".card-list");
+		const currentContainer = (): HTMLElement | null | undefined => dragging?.closest(".container");
 		let nextDropSlot: Zone | null = null;
 
 		const setOverlapped = (slot: Zone, isOverlapped: boolean) => {
@@ -60,11 +60,20 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 
 		document.addEventListener("pointermove", (ev: PointerEvent) => {
 			if (!dragging) return;
-			const newCoordinates = calculateCoord(currentContainer(), dragging, [ev.pageX, ev.pageY]);
+			const container = currentContainer();
+			if (container == undefined) return;
+			const newCoordinates = calculateCoord(container, dragging, { x: ev.pageX, y: ev.pageY });
 			if (!newCoordinates) return;
 
-			dragging.style.left = `${newCoordinates[0]}px`;
-			dragging.style.top = `${newCoordinates[1]}px`;
+			if (container == getContainer(Zone.Hand)) {
+				const limit = container.offsetWidth - container.offsetLeft * 2 - dragging.offsetWidth;
+				//to preserve the rotation effect when holding the card in hand, we can't modify the 'left' property
+				//and '--calc' css variable is a percentage
+				dragging.style.setProperty("--calc", (invlerp(0, limit, newCoordinates.x) * 100).toString());
+			} else {
+				if (newCoordinates.x > 0) dragging.style.left = `${newCoordinates.x}px`;
+				if (newCoordinates.y > 0) dragging.style.top = `${newCoordinates.y}px`;
+			}
 		});
 
 		dropZone.forEach((el) => {

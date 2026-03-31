@@ -121,6 +121,10 @@
     user-select: none;
     touch-action: none;
 
+    &:has(.dragging) {
+        cursor: grabbing;
+    }
+
     #stack-slot,
     #deck-pile-slot,
     #graveyard-slot,
@@ -208,7 +212,6 @@
         }
 
         .dragging {
-            opacity: 0.7;
             z-index: 2;
             transform: rotate(-2deg);
             pointer-events: none;

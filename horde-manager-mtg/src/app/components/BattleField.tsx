@@ -178,11 +178,11 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 				id="deck-pile-slot"
 				placeholder="Deck"
 				cardList={cardDataList.filter((card) => card.state.zone == Zone.Deck)}
-				onClick={() => {
-					changeCardState(
-						cardDataList.findIndex((card) => card.state.zone == Zone.Deck),
-						{ zone: handVisible ? Zone.Hand : Zone.Stack, isFrontSide: true },
-					);
+				onClick={(currentCardList) => {
+					changeCardState(getGlobalCardIndex(currentCardList[currentCardList.length - 1]), {
+						zone: handVisible ? Zone.Hand : Zone.Stack,
+						isFrontSide: true,
+					});
 				}}
 			/>
 

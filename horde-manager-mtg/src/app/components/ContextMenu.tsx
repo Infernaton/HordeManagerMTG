@@ -23,9 +23,10 @@ function ContextMenu({ items, cardIndex, children, id }: PropsWithChildren<Props
 
 	const contextMenuHandler = (e: React.MouseEvent) => {
 		e.preventDefault();
+		const element = e.target as HTMLElement;
 		setIsVisible(true);
-		const pos = getLocalPosition([e.clientX, e.clientY], e.target as HTMLElement);
-		setPosition({ x: pos[0], y: pos[1] });
+		const pos = getLocalPosition({ x: e.pageX, y: e.pageY }, element);
+		setPosition({ x: pos.x, y: pos.y });
 	};
 
 	const keyDownhandler = (e: KeyboardEvent) => {

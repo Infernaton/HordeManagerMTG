@@ -39,12 +39,15 @@ export function isOverlapping(a: HTMLElement, b: HTMLElement) {
 	);
 }
 
-export function getLocalPosition(screenClick: [x: number, y: number], element: HTMLElement): [x: number, y: number] {
+export function getLocalPosition(
+	screenClick: { x: number; y: number },
+	element: HTMLElement,
+): { x: number; y: number } {
 	const elementDimension = element.getBoundingClientRect();
-	const xlocal = screenClick[0] - elementDimension.x;
-	const ylocal = screenClick[1] - elementDimension.y;
+	const x = screenClick.x - elementDimension.x;
+	const y = screenClick.y - elementDimension.y;
 
-	return [xlocal, ylocal];
+	return { x, y };
 }
 
 export function isParent(child: HTMLElement, parent: HTMLElement) {

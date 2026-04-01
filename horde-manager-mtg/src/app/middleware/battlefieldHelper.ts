@@ -23,6 +23,7 @@ export function newFullDeck(cardList: Card[], sleeveColor: string) {
 			isFrontSide: false,
 			visibleArrow: false,
 			zone: Zone.Deck,
+			isTapped: false,
 		};
 		return {
 			card: card,

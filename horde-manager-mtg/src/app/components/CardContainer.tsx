@@ -28,7 +28,7 @@ export function CardsSlot({ ref, id, placeholder, cardList, cardContextMenu, onC
 		);
 
 		return (
-			<div className="card-holder" id={idE} key={idE}>
+			<div className={"card-holder" + (cardData.state.isTapped ? " tapped" : "")} id={idE} key={idE}>
 				{cardContextMenu ? (
 					<ContextMenu
 						id={"context-menu-" + id}

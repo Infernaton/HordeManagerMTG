@@ -11,6 +11,7 @@ import {
 	newFullDeck,
 } from "../middleware/battlefieldHelper";
 import { invlerp, isParent, patchObject } from "../middleware/handler";
+import { Buffer } from "../middleware/buffer";
 
 function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }) {
 	const Deck = deck.sections[0];
@@ -31,6 +32,8 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 		let dragging: HTMLElement | null = null;
 		const currentContainer = (): HTMLElement | null | undefined => dragging?.closest(".container");
 		let nextDropSlot: Zone | null = null;
+		let buffer = new Buffer(300);
+		let isSimpleClick: boolean = false;
 
 		const setOverlapped = (slot: Zone, isOverlapped: boolean) => {
 			// slot.overlapped(isOverlapped);
@@ -50,6 +53,9 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 			);
 			// prevent drag if a other click than e.button == 0 (left click) was pressed
 			if (!target || e.button != 0) return;
+
+			isSimpleClick = true;
+			buffer.start(() => (isSimpleClick = false));
 
 			dragging = target;
 			target.classList.add("dragging");
@@ -92,13 +98,15 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 		document.addEventListener("pointerup", () => {
 			if (dragging) {
 				dragging.classList.remove("dragging");
+				// get index of the card in the container internal list
+				const index = getGlobalCardIndex(dragging);
 
 				if (nextDropSlot !== null) {
-					// get index of the card in the container internal list
-					const index = getGlobalCardIndex(dragging);
-
 					changeCardState(index, { zone: nextDropSlot });
 					setOverlapped(nextDropSlot, false);
+				} else if (isSimpleClick) {
+					buffer.cancel();
+					togleCardState(index, "isTapped");
 				}
 			}
 
@@ -106,9 +114,14 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 		});
 	};
 
+	let hasSetupEvent = false;
 	useEffect(() => {
-		setupEvent(allowGrabZone, dropZone);
-	}, allowGrabZone.concat(dropZone));
+		if (!hasSetupEvent) {
+			console.log("Setup event");
+			setupEvent(allowGrabZone, dropZone);
+			hasSetupEvent = true;
+		}
+	}, [hasSetupEvent]);
 
 	const changeCardState = (cardIndex: number, newState: ICardState) => {
 		const newList = [...cardDataList];
@@ -118,6 +131,17 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 		currentCard.state = patchObject(currentCard.state, newState);
 
 		setCardDataList(newList);
+	};
+
+	const togleCardState = (cardIndex: number, stateName: string) => {
+		const currentState = cardDataList[cardIndex].state[stateName];
+		if (typeof currentState != "boolean" && typeof currentState != "undefined") {
+			console.error("Can't toggle that kind of statement: " + typeof currentState);
+			return;
+		}
+
+		const obj = { [stateName]: typeof currentState == "undefined" ? true : !currentState };
+		changeCardState(cardIndex, obj);
 	};
 
 	const moveFromStack = (currentCardList: ICardData[]) => {

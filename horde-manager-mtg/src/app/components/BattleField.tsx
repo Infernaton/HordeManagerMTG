@@ -106,6 +106,9 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 					setOverlapped(nextDropSlot, false);
 				} else if (isSimpleClick) {
 					buffer.cancel();
+					// to do: set onClick event depending of the zone it was applied
+					// for the moment will try to tapped the card in each zone
+					// (will have a visual effect only on the battlefield because of css)
 					togleCardState(index, "isTapped");
 				}
 			}
@@ -116,11 +119,10 @@ function BattleField({ deck, handVisible }: { deck: Deck; handVisible: boolean }
 
 	let hasSetupEvent = false;
 	useEffect(() => {
-		if (!hasSetupEvent) {
-			console.log("Setup event");
-			setupEvent(allowGrabZone, dropZone);
-			hasSetupEvent = true;
-		}
+		if (hasSetupEvent) return;
+
+		setupEvent(allowGrabZone, dropZone);
+		hasSetupEvent = true;
 	}, [hasSetupEvent]);
 
 	const changeCardState = (cardIndex: number, newState: ICardState) => {

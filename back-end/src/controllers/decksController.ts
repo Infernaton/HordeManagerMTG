@@ -4,6 +4,7 @@ import { Card } from "../models/Card.js";
 import { bulkReadFormat } from "../middleware/stringManipulation.js";
 import { DB } from "../db.js";
 import { Section } from "../models/Section.js";
+import { Scryfall } from "../api/scryfall.js";
 
 export const getAllDecks = async (req: Request, res: Response) => {
 	const db = await DB.connection();
@@ -37,25 +38,12 @@ export const importBulk = async (req: Request, res: Response) => {
 	// what the api call need
 	const { apiCallBody: identifiers, sortedCard } = bulkReadFormat(bulk);
 
-	let fetches: Array<Promise<AxiosResponse<any, any, {}>>> = [];
-	const MAX_REQUEST_CARD = 75;
-	for (let i = 0; i < identifiers.length; i = i + MAX_REQUEST_CARD) {
-		fetches.push(
-			axios.post(`${API_URL}/cards/collection`, {
-				identifiers: identifiers.slice(i, i + MAX_REQUEST_CARD),
-			}),
-		);
-	}
-	const data = await Promise.all(fetches);
+	const { found, notFound } = await Scryfall.searchCollections(identifiers);
 
-	const filteredData = data.map((d) => d.data);
-	const found = filteredData.flatMap((e) => e.data);
-	const notFound = filteredData.flatMap((e) => e.not_found);
+	const relatedCardID: string[] = [];
 
-	// let cards: Array<Card> = [];
 	for (let i = 0; i < found.length; i++) {
 		const card: Card = new Card(found[i]);
-		// cards.push(card);
 		for (const [key, value] of Object.entries(sortedCard)) {
 			// key -> name of the part
 			// value -> all the card name from that part
@@ -73,9 +61,33 @@ export const importBulk = async (req: Request, res: Response) => {
 				}
 			}
 		}
+
+		// get all related cards (token ...)
+		const potentialPart = found[i].all_parts?.filter((parts: any) =>
+			["token", "meld_result"].includes(parts.component),
+		);
+		if (potentialPart != undefined)
+			potentialPart.forEach((parts: any) => {
+				if (relatedCardID.indexOf(parts.id) === -1) relatedCardID.push(parts.id);
+			});
 	}
+
+	// fetch related cards
+	const relatedCard = await getRelatedCard(relatedCardID);
+	db.addRelatedCards(currentDeck.id, ...relatedCard);
+
 	db.commit();
 
 	// return { sortedCard, filteredData, notFound, cards };
 	return { notFound };
+};
+
+const getRelatedCard = async (currentRelatedCard: string[]) => {
+	const identifiers = currentRelatedCard.map((stringID) => {
+		return { id: stringID };
+	});
+
+	const { found, notFound } = await Scryfall.searchCollections(identifiers);
+
+	return found.map((cardData) => new Card(cardData));
 };

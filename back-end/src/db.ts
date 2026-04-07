@@ -1,5 +1,5 @@
 import { readFile, writeFile } from "fs/promises";
-import type { HordeDeck } from "./models/Deck.js";
+import type { Deck } from "./models/Deck.js";
 import type { Section } from "./models/Section.js";
 import type { Card } from "./models/Card.js";
 
@@ -12,7 +12,7 @@ import type { Card } from "./models/Card.js";
  * If data need to be updated, don't forget to call `DB.commit()` to commit the update to storage
  */
 export class DB {
-	#data: Array<HordeDeck>;
+	#data: Array<Deck>;
 
 	static path: string = "./db.json";
 	static instance: DB;
@@ -41,7 +41,7 @@ export class DB {
 	 * Push the updatedDeck from local modification through the global variable
 	 * @param updatedDeck
 	 */
-	push(updatedDeck: HordeDeck): void {
+	push(updatedDeck: Deck): void {
 		const deckIndex = this.#data.findIndex((e) => e.id == updatedDeck.id);
 		this.#data.fill(updatedDeck, deckIndex, deckIndex + 1);
 	}
@@ -61,7 +61,7 @@ export class DB {
 
 	//#region Decks
 
-	getDecks(): Array<HordeDeck> {
+	getDecks(): Array<Deck> {
 		return this.#data;
 	}
 
@@ -89,7 +89,6 @@ export class DB {
 		currentDeck.unsorted.push(card);
 
 		this.push(currentDeck);
-		//commit change to file
 
 		return true;
 	}
@@ -101,7 +100,20 @@ export class DB {
 		currentDeck.bosses = bosses;
 
 		this.push(currentDeck);
-		//commit change to file
+
+		return true;
+	}
+
+	addRelatedCards(idDeck: number, ...cards: Card[]) {
+		const currentDeck = this.getDeck(idDeck);
+		if (currentDeck == undefined) return false;
+
+		if (currentDeck.card_relation == undefined) currentDeck.card_relation = [];
+		currentDeck.card_relation.push(...cards);
+
+		this.push(currentDeck);
+
+		console.log(currentDeck);
 
 		return true;
 	}
@@ -136,7 +148,7 @@ export class DB {
 	}
 
 	removeSection(idDeck: number, idSection: number) {
-		const currentDeck = this.getDeck(idDeck) as HordeDeck;
+		const currentDeck = this.getDeck(idDeck) as Deck;
 		if (currentDeck == undefined) return false;
 
 		const tmp = currentDeck.sections.findIndex((e) => e.id == idSection);

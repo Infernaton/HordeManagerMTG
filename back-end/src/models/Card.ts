@@ -75,7 +75,7 @@ export class Card {
 		this.layout = fetch.layout;
 
 		// Meld card need to be inserted somehow ...
-		if (["transform", "modal_dfc"].includes(fetch.layout)) {
+		if (["transform", "modal_dfc", "double_faced_token"].includes(fetch.layout)) {
 			this.front_card = CardFace.new(fetch.card_faces[0], fetch.card_faces[0].image_uris);
 			this.back_card = CardFace.new(fetch.card_faces[1], fetch.card_faces[1].image_uris);
 		} else if (["split", "flip", "adventure"].includes(fetch.layout)) {
